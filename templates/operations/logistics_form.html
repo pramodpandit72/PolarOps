@@ -1,0 +1,82 @@
+{% extends 'app_base.html' %}
+
+{% block title %}{{ title }} | PolarOps{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block app_content %}
+<div class="max-w-2xl mx-auto">
+  <div class="mb-6">
+    <a href="{% url 'operations:logistics_list' %}" class="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+      &larr; Back to Logistics & Shipments
+    </a>
+    <h2 class="text-2xl font-extrabold text-[#0B1628] dark:text-[#F8FAFC] mt-2">{{ title }}</h2>
+    <p class="text-xs text-slate-500 dark:text-slate-400">Schedule air drops, Twin Otter supply flights, icebreaker sea freight, and overland tractor convoys.</p>
+  </div>
+
+  <div class="bg-white dark:bg-[#101D32] rounded-2xl border border-slate-200 dark:border-[#243B5A] p-6 sm:p-8 shadow-sm">
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-[#0B1628] dark:text-[#CBD5E1] mb-1">Shipment Tracking ID *</label>
+          {{ form.shipment_id }}
+          {% if form.shipment_id.errors %}<p class="text-red-500 text-xs mt-1">{{ form.shipment_id.errors.0 }}</p>{% endif %}
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-[#0B1628] dark:text-[#CBD5E1] mb-1">Transport Method *</label>
+          {{ form.transport_method }}
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-[#0B1628] dark:text-[#CBD5E1] mb-1">Cargo Description *</label>
+        {{ form.item_description }}
+        {% if form.item_description.errors %}<p class="text-red-500 text-xs mt-1">{{ form.item_description.errors.0 }}</p>{% endif %}
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-[#0B1628] dark:text-[#CBD5E1] mb-1">Origin Facility *</label>
+          {{ form.origin }}
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-[#0B1628] dark:text-[#CBD5E1] mb-1">Destination Point *</label>
+          {{ form.destination }}
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-[#0B1628] dark:text-[#CBD5E1] mb-1">Associated Expedition</label>
+          {{ form.expedition }}
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-[#0B1628] dark:text-[#CBD5E1] mb-1">Shipment Status *</label>
+          {{ form.status }}
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-[#0B1628] dark:text-[#CBD5E1] mb-1">Dispatch Date</label>
+          {{ form.dispatch_date }}
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-[#0B1628] dark:text-[#CBD5E1] mb-1">Estimated Arrival (ETA)</label>
+          {{ form.expected_arrival }}
+        </div>
+      </div>
+
+      <div class="pt-5 border-t border-slate-100 dark:border-[#243B5A] flex justify-end gap-3">
+        <a href="{% url 'operations:logistics_list' %}" class="btn-secondary px-5 py-2.5 rounded-xl border border-slate-300 dark:border-[#243B5A] text-xs font-semibold text-slate-700 dark:text-slate-300">
+          Cancel
+        </a>
+        <button type="submit" class="btn-primary px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20">
+          Save Shipment
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

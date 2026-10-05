@@ -1,0 +1,113 @@
+{% extends 'app_base.html' %}
+
+{% block title %}Personnel | PolarOps{% endblock %}
+{% block page_title %}Personnel Coordination{% endblock %}
+
+{% block app_content %}
+<!-- Header Bar -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+  <div>
+    <h2 class="text-2xl font-extrabold text-[#0B1628] dark:text-[#F8FAFC]">Expedition Personnel</h2>
+    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Manage scientists, field engineers, logistics coordinators, and medical personnel.</p>
+  </div>
+  <a href="{% url 'operations:personnel_create' %}" class="btn-primary inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-xs shadow-sm hover:bg-blue-700 self-start">
+    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+    Add Personnel
+  </a>
+</div>
+
+<!-- Search & Filters -->
+<div class="bg-white dark:bg-[#101D32] p-4 rounded-2xl border border-slate-200 dark:border-[#243B5A] shadow-sm mb-6">
+  <form method="get" class="flex flex-wrap items-center gap-3">
+    <div class="flex-1 min-w-[200px]">
+      <input type="text" name="q" value="{{ q }}" placeholder="Search by personnel name, email, or contact..."
+        class="w-full px-3.5 py-2 rounded-xl text-xs border border-slate-300 dark:border-[#243B5A] bg-slate-50/50 dark:bg-[#07111F] text-[#0B1628] dark:text-[#F8FAFC] focus:outline-none focus:border-blue-600">
+    </div>
+    <div>
+      <select name="role" class="px-3 py-2 rounded-xl text-xs border border-slate-300 dark:border-[#243B5A] bg-slate-50/50 dark:bg-[#07111F] text-[#0B1628] dark:text-[#F8FAFC]">
+        <option value="">All Roles</option>
+        {% for val, label in role_choices %}
+        <option value="{{ val }}" {% if role_filter == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <select name="status" class="px-3 py-2 rounded-xl text-xs border border-slate-300 dark:border-[#243B5A] bg-slate-50/50 dark:bg-[#07111F] text-[#0B1628] dark:text-[#F8FAFC]">
+        <option value="">All Statuses</option>
+        {% for val, label in status_choices %}
+        <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700">Filter</button>
+    {% if q or role_filter or status_filter %}
+    <a href="{% url 'operations:personnel_list' %}" class="text-xs text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 py-2">Clear</a>
+    {% endif %}
+  </form>
+</div>
+
+<!-- Personnel Table -->
+<div class="bg-white dark:bg-[#101D32] rounded-2xl border border-slate-200 dark:border-[#243B5A] shadow-sm overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-left text-xs">
+      <thead class="bg-slate-50 dark:bg-[#07111F] text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-[#243B5A]">
+        <tr>
+          <th class="px-5 py-3 font-semibold">Specialist Name</th>
+          <th class="px-4 py-3 font-semibold">Role</th>
+          <th class="px-4 py-3 font-semibold">Assigned Expedition</th>
+          <th class="px-4 py-3 font-semibold">Emergency Comms</th>
+          <th class="px-4 py-3 font-semibold">Status</th>
+          <th class="px-5 py-3 font-semibold text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100 dark:divide-[#243B5A]/60">
+        {% for p in personnel_list %}
+        <tr class="hover:bg-slate-50/50 dark:hover:bg-[#12233F]/50 transition-colors">
+          <td class="px-5 py-3.5">
+            <div class="flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 font-bold text-xs flex items-center justify-center">
+                {{ p.name|slice:":1" }}
+              </div>
+              <div>
+                <p class="font-bold text-[#0B1628] dark:text-[#F8FAFC]">{{ p.name }}</p>
+                <p class="text-[11px] text-slate-400">{{ p.email }}</p>
+              </div>
+            </div>
+          </td>
+          <td class="px-4 py-3.5 text-[#334155] dark:text-[#CBD5E1] font-medium">
+            {{ p.role }}
+          </td>
+          <td class="px-4 py-3.5">
+            {% if p.expedition %}
+            <a href="{% url 'operations:expedition_detail' p.expedition.pk %}" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+              {{ p.expedition.name }}
+            </a>
+            {% else %}
+            <span class="text-slate-400 italic">Unassigned</span>
+            {% endif %}
+          </td>
+          <td class="px-4 py-3.5 text-slate-500 dark:text-slate-400 font-mono text-[11px]">
+            {{ p.contact|default:"Radio Check Pending" }}
+          </td>
+          <td class="px-4 py-3.5">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold {% if p.status == 'Active' %}bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800{% elif p.status == 'On Leave' %}bg-amber-50 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800{% else %}bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400{% endif %}">
+              {{ p.status }}
+            </span>
+          </td>
+          <td class="px-5 py-3.5 text-right space-x-2">
+            <a href="{% url 'operations:personnel_edit' p.pk %}" class="font-semibold text-slate-500 hover:text-blue-600 dark:hover:text-blue-400">Edit</a>
+            <a href="{% url 'operations:personnel_delete' p.pk %}" class="font-semibold text-red-500 hover:text-red-700">Delete</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="px-5 py-10 text-center text-slate-400">
+            No personnel found matching current filters.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

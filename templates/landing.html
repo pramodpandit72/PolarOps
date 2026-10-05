@@ -1,0 +1,735 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}PolarOps | Polar Expedition Logistics & Asset Management{% endblock %}
+{% block meta_description %}PolarOps — Enterprise platform to plan expeditions, coordinate teams, track critical assets, and manage logistics across extreme polar environments.{% endblock %}
+
+{% block content %}
+
+<!-- ═══════════════════════════════════════════
+     NAVBAR
+════════════════════════════════════════════ -->
+<nav id="main-navbar" class="fixed top-0 inset-x-0 z-50 nav-blur bg-white/90 dark:bg-[#07111F]/90 border-b border-slate-200/80 dark:border-[#243B5A]/60 transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+
+      <!-- Logo -->
+      <a href="{% url 'core:index' %}" class="flex items-center gap-2.5 font-bold text-xl text-[#0B1628] dark:text-[#F8FAFC] tracking-tight group">
+        <div class="w-8 h-8 rounded-lg bg-blue-600/10 dark:bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+          </svg>
+        </div>
+        <span>Polar<span class="text-blue-600 dark:text-blue-400">Ops</span></span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-300">
+        <a href="#features" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Features</a>
+        <a href="#how-it-works" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">How It Works</a>
+        <a href="#preview" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Platform</a>
+        <a href="#about" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About</a>
+      </div>
+
+      <!-- Right actions -->
+      <div class="hidden md:flex items-center gap-3">
+        <!-- Theme toggle -->
+        <button data-theme-toggle aria-label="Toggle dark mode"
+          class="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#12233F] transition-colors border border-transparent hover:border-slate-200 dark:hover:border-[#243B5A]">
+          <svg class="w-5 h-5 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+          </svg>
+          <svg class="w-5 h-5 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 3v1m0 16v1m8.66-9H21M3 12H2.34m15.36-6.36l-.71.71M6.05 17.66l-.71.71M17.66 17.66l-.71-.71M6.05 6.34l-.71-.71M12 7a5 5 0 100 10A5 5 0 0012 7z"/>
+          </svg>
+        </button>
+
+        <a href="{% url 'login' %}"
+          class="btn-secondary px-4 py-2 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-[#243B5A] hover:bg-slate-50 dark:hover:bg-[#101D32] hover:border-blue-500 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400">
+          Sign In
+        </a>
+        <a href="{% url 'core:signup' %}"
+          class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 shadow-sm shadow-blue-500/25">
+          Get Started
+        </a>
+      </div>
+
+      <!-- Mobile menu button -->
+      <button id="mobile-menu-btn" aria-label="Open menu" aria-expanded="false"
+        class="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#12233F]">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-[#243B5A] bg-white dark:bg-[#07111F] px-4 py-4 space-y-3">
+    <a href="#features" class="block text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600">Features</a>
+    <a href="#how-it-works" class="block text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600">How It Works</a>
+    <a href="#preview" class="block text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600">Platform</a>
+    <a href="#about" class="block text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600">About</a>
+    <div class="flex gap-3 pt-2">
+      <a href="{% url 'login' %}" class="flex-1 text-center px-4 py-2 rounded-lg text-sm font-semibold border border-slate-300 text-slate-700 dark:border-[#243B5A] dark:text-slate-200">Sign In</a>
+      <a href="{% url 'core:signup' %}" class="flex-1 text-center px-4 py-2 rounded-lg text-sm font-semibold bg-blue-600 text-white">Get Started</a>
+    </div>
+    <button data-theme-toggle class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 pt-2">
+      <svg class="w-4 h-4 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+      </svg>
+      <svg class="w-4 h-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.66-9H21M3 12H2.34"/>
+      </svg>
+      Toggle theme
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     HERO SECTION
+════════════════════════════════════════════ -->
+<section class="hero-bg relative min-h-screen flex items-center overflow-hidden pt-20 pb-16">
+
+  <!-- Ambient aurora blobs -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+    <div class="aurora-blob-1 absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full
+      bg-gradient-to-br from-blue-400/20 via-sky-300/15 to-transparent blur-3xl"></div>
+    <div class="aurora-blob-2 absolute top-20 right-0 w-[550px] h-[550px] rounded-full
+      bg-gradient-to-bl from-purple-500/15 via-blue-400/10 to-transparent blur-3xl"></div>
+    <div class="aurora-blob-3 absolute bottom-0 left-1/3 w-[450px] h-[450px] rounded-full
+      bg-gradient-to-t from-sky-400/15 via-blue-200/10 to-transparent blur-3xl"></div>
+    <!-- Fine grid pattern -->
+    <div class="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
+      style="background-image:linear-gradient(#2563EB 1px,transparent 1px),linear-gradient(90deg,#2563EB 1px,transparent 1px);background-size:56px 56px;"></div>
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+      <!-- Left: Messaging -->
+      <div>
+        <!-- Pill Badge -->
+        <div class="animate-fade-up delay-100 inline-flex items-center gap-2 px-3.5 py-1.5 mb-6
+          bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800
+          rounded-full text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wider shadow-sm">
+          <span class="pulse-dot w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 inline-block"></span>
+          Enterprise Polar Expedition Platform
+        </div>
+
+        <!-- Headline -->
+        <h1 class="animate-fade-up delay-200 text-4xl sm:text-5xl lg:text-6xl font-extrabold
+          text-[#0B1628] dark:text-[#F8FAFC] leading-[1.12] tracking-tight mb-6">
+          Integrated Polar<br>
+          <span class="gradient-text-animate">Expedition Logistics</span><br>
+          & Asset Management
+        </h1>
+
+        <!-- Supporting Text -->
+        <p class="animate-fade-up delay-300 text-base sm:text-lg text-[#334155] dark:text-[#CBD5E1] max-w-xl mb-8 leading-relaxed font-normal">
+          Plan expeditions, coordinate specialized scientific teams, track critical assets, and manage complex supply chains across extreme environments with real-time operational precision.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="animate-fade-up delay-400 flex flex-wrap gap-4">
+          <a href="{% url 'core:signup' %}"
+            class="btn-primary inline-flex items-center gap-2 px-6 py-3.5 rounded-xl
+            bg-blue-600 text-white font-semibold text-sm shadow-md shadow-blue-500/25
+            hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600">
+            Get Started
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </a>
+          <a href="{% url 'login' %}"
+            class="btn-secondary inline-flex items-center gap-2 px-6 py-3.5 rounded-xl
+            border border-slate-300 dark:border-[#243B5A] text-[#0B1628] dark:text-[#F8FAFC]
+            font-semibold text-sm bg-white/70 dark:bg-[#101D32]/70 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400">
+            Sign In
+          </a>
+        </div>
+
+        <!-- Trust Indicators -->
+        <div class="animate-fade-up delay-500 flex flex-wrap gap-6 mt-10 text-xs font-medium text-slate-600 dark:text-slate-400">
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            Full Expedition Control
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            Real-Time Asset Telemetry
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            Mission-Critical Reliability
+          </span>
+        </div>
+      </div>
+
+      <!-- Right: Technical Hero Visual -->
+      <div class="relative hidden lg:block" aria-hidden="true">
+
+        <!-- Atmospheric Glow -->
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-3xl blur-2xl"></div>
+
+        <!-- Main Operations Center Card -->
+        <div class="float-card-1 relative glass-light dark:glass rounded-2xl p-6 shadow-2xl border border-slate-200 dark:border-[#243B5A] max-w-md mx-auto">
+          <!-- Card Header -->
+          <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-[#243B5A]/80">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+              <span class="font-bold text-[#0B1628] dark:text-[#F8FAFC] text-sm tracking-wide">PolarOps Operations Center</span>
+            </div>
+            <span class="flex items-center gap-1.5 text-xs text-blue-700 dark:text-blue-400 font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-900">
+              <span class="pulse-dot w-1.5 h-1.5 rounded-full bg-blue-600 inline-block"></span>
+              Live Telemetry
+            </span>
+          </div>
+
+          <!-- Stat Matrix -->
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <div class="bg-blue-50/70 dark:bg-[#12233F] rounded-xl p-3.5 border border-blue-100 dark:border-[#243B5A]/60">
+              <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Active Expeditions</p>
+              <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">04</p>
+              <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">3 Arctic • 1 Antarctic</p>
+            </div>
+            <div class="bg-indigo-50/70 dark:bg-[#12233F] rounded-xl p-3.5 border border-indigo-100 dark:border-[#243B5A]/60">
+              <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Field Personnel</p>
+              <p class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">12</p>
+              <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">100% Accounted For</p>
+            </div>
+            <div class="bg-purple-50/70 dark:bg-[#12233F] rounded-xl p-3.5 border border-purple-100 dark:border-[#243B5A]/60">
+              <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Deployed Assets</p>
+              <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">18</p>
+              <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">14 Ready • 4 In Transit</p>
+            </div>
+            <div class="bg-amber-50/70 dark:bg-[#12233F] rounded-xl p-3.5 border border-amber-100 dark:border-[#243B5A]/60">
+              <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Service Alerts</p>
+              <p class="text-2xl font-bold text-amber-600 dark:text-amber-400">03</p>
+              <p class="text-[11px] text-amber-700 dark:text-amber-400/80 mt-0.5">Action Scheduled</p>
+            </div>
+          </div>
+
+          <!-- Mission Progress Indicator -->
+          <div class="bg-slate-50 dark:bg-[#0B1628] rounded-xl p-3 border border-slate-100 dark:border-[#243B5A]/50">
+            <div class="flex justify-between text-xs text-slate-600 dark:text-slate-300 font-medium mb-1.5">
+              <span>Svalbard Traverse Campaign</span>
+              <span class="text-blue-600 dark:text-blue-400 font-bold">78%</span>
+            </div>
+            <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+              <div class="h-full w-[78%] bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-full"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Badge Card: Asset Readiness -->
+        <div class="float-card-2 absolute -right-6 top-6 glass-light dark:glass rounded-xl p-3.5 shadow-xl border border-slate-200 dark:border-[#243B5A] w-48">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+            <p class="text-xs font-bold text-[#0B1628] dark:text-[#F8FAFC]">Asset Readiness</p>
+          </div>
+          <div class="space-y-1.5 text-xs">
+            <div class="flex justify-between">
+              <span class="text-slate-500 dark:text-slate-400">Snowmobiles</span>
+              <span class="font-semibold text-blue-600 dark:text-blue-400">6 / 6 Live</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500 dark:text-slate-400">Generators</span>
+              <span class="font-semibold text-indigo-600 dark:text-indigo-400">4 / 4 Normal</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500 dark:text-slate-400">Sat-Comms</span>
+              <span class="font-semibold text-purple-600 dark:text-purple-400">Optimal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Badge Card: Weather & Caution -->
+        <div class="float-card-3 absolute -left-6 bottom-8 glass-light dark:glass rounded-xl p-3.5 shadow-xl border border-amber-200/80 dark:border-amber-700/50 w-44">
+          <div class="flex items-center gap-2 mb-1.5">
+            <svg class="w-4 h-4 text-amber-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-xs font-bold text-amber-700 dark:text-amber-300">Weather Alert</span>
+          </div>
+          <p class="text-[11px] text-slate-600 dark:text-slate-300 leading-tight">Summit Station: -34°C with gale wind threshold reached</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Divider Wave -->
+  <div class="wave-divider absolute bottom-0 inset-x-0" aria-hidden="true">
+    <svg viewBox="0 0 1440 48" preserveAspectRatio="none" class="w-full h-8 sm:h-12 fill-slate-50 dark:fill-[#0B1628]">
+      <path d="M0,24 C360,48 1080,0 1440,24 L1440,48 L0,48 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     STATISTICS SECTION
+════════════════════════════════════════════ -->
+<section class="bg-slate-50 dark:bg-[#0B1628] py-16 border-b border-slate-200/80 dark:border-[#243B5A]/60 transition-colors">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="reveal grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+      <div>
+        <p class="stat-number text-4xl sm:text-5xl font-extrabold text-blue-600 dark:text-blue-400">
+          <span data-target="24">0</span><span class="text-2xl font-bold">/7</span>
+        </p>
+        <p class="mt-2 text-sm font-semibold text-[#0B1628] dark:text-[#F8FAFC]">Operational Visibility</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Continuous telemetry tracking</p>
+      </div>
+      <div>
+        <p class="stat-number text-4xl sm:text-5xl font-extrabold text-blue-600 dark:text-blue-400">
+          <span data-target="100">0</span><span class="text-2xl font-bold">+</span>
+        </p>
+        <p class="mt-2 text-sm font-semibold text-[#0B1628] dark:text-[#F8FAFC]">Managed Expedition Assets</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Cold-certified equipment & transport</p>
+      </div>
+      <div>
+        <p class="stat-number text-4xl sm:text-5xl font-extrabold text-purple-600 dark:text-purple-400">
+          <span data-target="50">0</span><span class="text-2xl font-bold">+</span>
+        </p>
+        <p class="mt-2 text-sm font-semibold text-[#0B1628] dark:text-[#F8FAFC]">Deployed Field Specialists</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Scientists, guides, and logisticians</p>
+      </div>
+      <div>
+        <p class="stat-number text-4xl sm:text-5xl font-extrabold text-indigo-600 dark:text-indigo-400">
+          <span data-target="10">0</span><span class="text-2xl font-bold">+</span>
+        </p>
+        <p class="mt-2 text-sm font-semibold text-[#0B1628] dark:text-[#F8FAFC]">Active Polar Stations</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Arctic and Antarctic coordinates</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FEATURES SECTION
+════════════════════════════════════════════ -->
+<section id="features" class="bg-white dark:bg-[#07111F] py-24 transition-colors">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Section Header -->
+    <div class="reveal text-center max-w-3xl mx-auto mb-16">
+      <span class="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">Core Capabilities</span>
+      <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold text-[#0B1628] dark:text-[#F8FAFC] tracking-tight">
+        Engineered for the demands of polar operations
+      </h2>
+      <p class="mt-4 text-base text-[#334155] dark:text-[#CBD5E1] leading-relaxed">
+        From remote ice sheets to coastal research stations, PolarOps provides the integrated command suite required to ensure mission success and team safety.
+      </p>
+    </div>
+
+    <!-- 6 Core Feature Cards -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- 1. Expedition Management -->
+      <div class="reveal feature-card bg-white dark:bg-[#101D32] rounded-2xl p-7 border border-slate-200 dark:border-[#243B5A]">
+        <div class="w-12 h-12 mb-5 rounded-xl bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+          </svg>
+        </div>
+        <h3 class="font-bold text-lg text-[#0B1628] dark:text-[#F8FAFC] mb-2.5">Expedition Management</h3>
+        <p class="text-sm text-[#334155] dark:text-[#CBD5E1] leading-relaxed">
+          Plan, approve, and monitor polar research campaigns. Define environmental safety thresholds, route corridors, and mission phases from a centralized workspace.
+        </p>
+      </div>
+
+      <!-- 2. Personnel Management -->
+      <div class="reveal feature-card bg-white dark:bg-[#101D32] rounded-2xl p-7 border border-slate-200 dark:border-[#243B5A]">
+        <div class="w-12 h-12 mb-5 rounded-xl bg-sky-50 dark:bg-sky-900/30 border border-sky-200 dark:border-sky-800 flex items-center justify-center text-sky-600 dark:text-sky-400">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <h3 class="font-bold text-lg text-[#0B1628] dark:text-[#F8FAFC] mb-2.5">Personnel Management</h3>
+        <p class="text-sm text-[#334155] dark:text-[#CBD5E1] leading-relaxed">
+          Manage scientific crews, technical staff, and field guides. Track extreme-weather qualifications, medical clearances, emergency roles, and deployment readiness.
+        </p>
+      </div>
+
+      <!-- 3. Asset Management -->
+      <div class="reveal feature-card bg-white dark:bg-[#101D32] rounded-2xl p-7 border border-slate-200 dark:border-[#243B5A]">
+        <div class="w-12 h-12 mb-5 rounded-xl bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800 flex items-center justify-center text-purple-600 dark:text-purple-400">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+          </svg>
+        </div>
+        <h3 class="font-bold text-lg text-[#0B1628] dark:text-[#F8FAFC] mb-2.5">Asset Management</h3>
+        <p class="text-sm text-[#334155] dark:text-[#CBD5E1] leading-relaxed">
+          Track specialized polar vehicles, drill rigs, survival gear, and power generators. Maintain precise custody records, telemetry status, and cold-soak ratings.
+        </p>
+      </div>
+
+      <!-- 4. Supply & Logistics -->
+      <div class="reveal feature-card bg-white dark:bg-[#101D32] rounded-2xl p-7 border border-slate-200 dark:border-[#243B5A]">
+        <div class="w-12 h-12 mb-5 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+          </svg>
+        </div>
+        <h3 class="font-bold text-lg text-[#0B1628] dark:text-[#F8FAFC] mb-2.5">Supply & Logistics</h3>
+        <p class="text-sm text-[#334155] dark:text-[#CBD5E1] leading-relaxed">
+          Coordinate ski-equipped cargo aircraft, icebreaker transits, and fuel depots. Monitor critical rations and receive automated warnings prior to stock depletion.
+        </p>
+      </div>
+
+      <!-- 5. Maintenance -->
+      <div class="reveal feature-card bg-white dark:bg-[#101D32] rounded-2xl p-7 border border-slate-200 dark:border-[#243B5A]">
+        <div class="w-12 h-12 mb-5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <h3 class="font-bold text-lg text-[#0B1628] dark:text-[#F8FAFC] mb-2.5">Maintenance Protocol</h3>
+        <p class="text-sm text-[#334155] dark:text-[#CBD5E1] leading-relaxed">
+          Enforce rigid pre-departure inspections and cold-weather service cycles. Log machinery runtime to guarantee life-support hardware never fails in deep freeze.
+        </p>
+      </div>
+
+      <!-- 6. Task Management -->
+      <div class="reveal feature-card bg-white dark:bg-[#101D32] rounded-2xl p-7 border border-slate-200 dark:border-[#243B5A]">
+        <div class="w-12 h-12 mb-5 rounded-xl bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+          </svg>
+        </div>
+        <h3 class="font-bold text-lg text-[#0B1628] dark:text-[#F8FAFC] mb-2.5">Task Management</h3>
+        <p class="text-sm text-[#334155] dark:text-[#CBD5E1] leading-relaxed">
+          Assign, prioritize, and track operational tasks across distributed research teams. Maintain full accountability and audit trails for safety-critical procedures.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     HOW IT WORKS
+════════════════════════════════════════════ -->
+<section id="how-it-works" class="bg-slate-50 dark:bg-[#0B1628] py-24 transition-colors border-y border-slate-200/80 dark:border-[#243B5A]/60">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="reveal text-center max-w-xl mx-auto mb-16">
+      <span class="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">Operational Lifecycle</span>
+      <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold text-[#0B1628] dark:text-[#F8FAFC]">How it works</h2>
+      <p class="mt-3 text-sm text-[#334155] dark:text-[#CBD5E1]">A disciplined three-phase framework for high-latitude logistics.</p>
+    </div>
+
+    <!-- Steps: horizontal on md+, vertical on mobile -->
+    <div class="reveal relative">
+      <!-- Connecting line (desktop) -->
+      <div class="hidden md:block absolute top-10 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 mx-28" aria-hidden="true"></div>
+
+      <div class="grid md:grid-cols-3 gap-12 md:gap-6 relative">
+
+        <!-- Step 1 -->
+        <div class="flex flex-col items-center text-center">
+          <div class="relative w-20 h-20 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 mb-6 z-10 text-white">
+            <svg class="w-9 h-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+            <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#0B1628] text-white text-xs font-bold flex items-center justify-center border-2 border-white dark:border-[#101D32]">1</span>
+          </div>
+          <h3 class="font-bold text-[#0B1628] dark:text-[#F8FAFC] text-lg mb-2">01 — Plan</h3>
+          <p class="text-sm text-[#334155] dark:text-[#CBD5E1] leading-relaxed max-w-xs">
+            Define mission objectives, safety protocols, required asset inventory, and team qualifications before field deployment.
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="flex flex-col items-center text-center">
+          <div class="relative w-20 h-20 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/25 mb-6 z-10 text-white">
+            <svg class="w-9 h-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+            <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#0B1628] text-white text-xs font-bold flex items-center justify-center border-2 border-white dark:border-[#101D32]">2</span>
+          </div>
+          <h3 class="font-bold text-[#0B1628] dark:text-[#F8FAFC] text-lg mb-2">02 — Coordinate</h3>
+          <p class="text-sm text-[#334155] dark:text-[#CBD5E1] leading-relaxed max-w-xs">
+            Dispatch equipment, schedule transport routes, and align distributed research units across bases and temporary camps.
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="flex flex-col items-center text-center">
+          <div class="relative w-20 h-20 rounded-2xl bg-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/25 mb-6 z-10 text-white">
+            <svg class="w-9 h-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#0B1628] text-white text-xs font-bold flex items-center justify-center border-2 border-white dark:border-[#101D32]">3</span>
+          </div>
+          <h3 class="font-bold text-[#0B1628] dark:text-[#F8FAFC] text-lg mb-2">03 — Monitor</h3>
+          <p class="text-sm text-[#334155] dark:text-[#CBD5E1] leading-relaxed max-w-xs">
+            Track operational health, fuel reserves, maintenance alerts, and task completions in real time through the unified dashboard.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PRODUCT PREVIEW
+════════════════════════════════════════════ -->
+<section id="preview" class="bg-white dark:bg-[#07111F] py-24 transition-colors">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="reveal text-center max-w-2xl mx-auto mb-14">
+      <span class="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">Platform Overview</span>
+      <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold text-[#0B1628] dark:text-[#F8FAFC] tracking-tight">
+        One workspace.<br>Complete operational visibility.
+      </h2>
+      <p class="mt-4 text-base text-[#334155] dark:text-[#CBD5E1]">
+        The PolarOps dashboard provides mission commanders and research directors with an instant view of all active deployments.
+      </p>
+    </div>
+
+    <!-- Mock dashboard preview -->
+    <div class="reveal glass-light dark:bg-[#101D32] rounded-2xl shadow-2xl overflow-hidden border border-slate-200 dark:border-[#243B5A]">
+      <!-- Browser chrome -->
+      <div class="bg-slate-100 dark:bg-[#0B1628] px-4 py-3 flex items-center gap-2 border-b border-slate-200 dark:border-[#243B5A]">
+        <span class="w-3 h-3 rounded-full bg-red-400"></span>
+        <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+        <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+        <span class="ml-3 flex-1 bg-white dark:bg-[#12233F] rounded-md px-3 py-1 text-xs text-slate-500 dark:text-slate-300 font-mono border border-slate-200 dark:border-[#243B5A]">
+          polarops.onrender.com/dashboard/
+        </span>
+      </div>
+
+      <!-- Dashboard mockup content -->
+      <div class="p-6 bg-slate-50 dark:bg-[#07111F]">
+        <!-- Header bar -->
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="font-bold text-lg text-[#0B1628] dark:text-[#F8FAFC]">Operations Dashboard</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Arctic & Antarctic Operations Command</p>
+          </div>
+          <span class="flex items-center gap-1.5 text-xs bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full font-semibold border border-blue-200 dark:border-blue-900">
+            <span class="pulse-dot w-1.5 h-1.5 rounded-full bg-blue-600 inline-block"></span>
+            All Telemetry Operational
+          </span>
+        </div>
+
+        <!-- Metric grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+          <div class="bg-white dark:bg-[#101D32] rounded-xl p-3 border border-slate-200 dark:border-[#243B5A] text-center">
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-1">Expeditions</p>
+            <p class="text-xl font-bold text-blue-600 dark:text-blue-400">04</p>
+          </div>
+          <div class="bg-white dark:bg-[#101D32] rounded-xl p-3 border border-slate-200 dark:border-[#243B5A] text-center">
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-1">Personnel</p>
+            <p class="text-xl font-bold text-indigo-600 dark:text-indigo-400">12</p>
+          </div>
+          <div class="bg-white dark:bg-[#101D32] rounded-xl p-3 border border-slate-200 dark:border-[#243B5A] text-center">
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-1">Assets</p>
+            <p class="text-xl font-bold text-purple-600 dark:text-purple-400">18</p>
+          </div>
+          <div class="bg-white dark:bg-[#101D32] rounded-xl p-3 border border-slate-200 dark:border-[#243B5A] text-center">
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-1">Available</p>
+            <p class="text-xl font-bold text-blue-600 dark:text-blue-400">14</p>
+          </div>
+          <div class="bg-white dark:bg-[#101D32] rounded-xl p-3 border border-slate-200 dark:border-[#243B5A] text-center">
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-1">Low Stock</p>
+            <p class="text-xl font-bold text-amber-600 dark:text-amber-400">03</p>
+          </div>
+          <div class="bg-white dark:bg-[#101D32] rounded-xl p-3 border border-slate-200 dark:border-[#243B5A] text-center">
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-1">Tasks</p>
+            <p class="text-xl font-bold text-sky-600 dark:text-sky-400">07</p>
+          </div>
+        </div>
+
+        <!-- Table preview -->
+        <div class="bg-white dark:bg-[#101D32] rounded-xl border border-slate-200 dark:border-[#243B5A] overflow-hidden">
+          <div class="px-4 py-3 border-b border-slate-100 dark:border-[#243B5A] flex justify-between items-center">
+            <p class="text-sm font-semibold text-[#0B1628] dark:text-[#F8FAFC]">Active Expeditions</p>
+            <span class="text-xs text-slate-500">Live Status</span>
+          </div>
+          <div class="divide-y divide-slate-100 dark:divide-[#243B5A]/60">
+            <div class="flex items-center justify-between px-4 py-3 text-sm">
+              <span class="font-medium text-[#0B1628] dark:text-[#F8FAFC]">Arctic Survey — Svalbard Archipelago</span>
+              <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800">Active</span>
+            </div>
+            <div class="flex items-center justify-between px-4 py-3 text-sm">
+              <span class="font-medium text-[#0B1628] dark:text-[#F8FAFC]">Ice Core Drilling Campaign — Summit Greenland</span>
+              <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">Planning</span>
+            </div>
+            <div class="flex items-center justify-between px-4 py-3 text-sm">
+              <span class="font-medium text-[#0B1628] dark:text-[#F8FAFC]">Antarctic Traverse — Ross Ice Shelf Station</span>
+              <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800">Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     POLAR ENVIRONMENT SECTION
+════════════════════════════════════════════ -->
+<section id="about" class="relative bg-[#07111F] text-white py-24 overflow-hidden border-t border-[#243B5A]">
+  <!-- Aurora Background Accent -->
+  <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+    <div class="aurora-blob-1 absolute -top-24 left-1/4 w-96 h-96 rounded-full bg-blue-500/15 blur-3xl"></div>
+    <div class="aurora-blob-2 absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-purple-500/15 blur-3xl"></div>
+    <div class="absolute inset-0 opacity-[0.04]"
+      style="background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:48px 48px;"></div>
+  </div>
+
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="reveal">
+      <span class="text-xs font-bold uppercase tracking-widest text-blue-400">Extreme Environment Engineering</span>
+      <h2 class="mt-4 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight tracking-tight">
+        Built for operations<br>
+        <span class="gradient-text">beyond the ordinary.</span>
+      </h2>
+      <p class="mt-6 text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        When sub-zero blizzards hit and nearest assistance is hundreds of miles away, logistics cannot rely on fragmented spreadsheets. PolarOps gives research programs the clarity, reliability, and precision required to stay safe and operational.
+      </p>
+    </div>
+
+    <!-- Polar Capabilities Grid -->
+    <div class="reveal mt-12 grid grid-cols-2 sm:grid-cols-4 gap-6 text-slate-300">
+      <div class="bg-[#101D32]/80 border border-[#243B5A] p-5 rounded-2xl flex flex-col items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center border border-blue-500/30">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.66-9H21M3 12H2.34m15.36-6.36l-.71.71M6.05 17.66l-.71.71M17.66 17.66l-.71-.71M6.05 6.34l-.71-.71M12 7a5 5 0 100 10A5 5 0 0012 7z"/>
+          </svg>
+        </div>
+        <span class="text-xs font-semibold text-white">Arctic Conditions</span>
+        <span class="text-[11px] text-slate-400">-40°C Cold-Rated</span>
+      </div>
+
+      <div class="bg-[#101D32]/80 border border-[#243B5A] p-5 rounded-2xl flex flex-col items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-sky-600/20 text-sky-400 flex items-center justify-center border border-sky-500/30">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <span class="text-xs font-semibold text-white">Remote Stations</span>
+        <span class="text-[11px] text-slate-400">Low-Bandwidth Sync</span>
+      </div>
+
+      <div class="bg-[#101D32]/80 border border-[#243B5A] p-5 rounded-2xl flex flex-col items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-purple-600/20 text-purple-400 flex items-center justify-center border border-purple-500/30">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+        </div>
+        <span class="text-xs font-semibold text-white">Mission Critical</span>
+        <span class="text-[11px] text-slate-400">Zero-Failure Standard</span>
+      </div>
+
+      <div class="bg-[#101D32]/80 border border-[#243B5A] p-5 rounded-2xl flex flex-col items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center border border-indigo-500/30">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <span class="text-xs font-semibold text-white">Real-Time Telemetry</span>
+        <span class="text-[11px] text-slate-400">Live Satellite Uplink</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FINAL CTA
+════════════════════════════════════════════ -->
+<section class="bg-gradient-to-br from-[#0B1628] via-[#12233F] to-[#1E3A8A] py-20 border-t border-[#243B5A]">
+  <div class="reveal max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight">
+      Ready to coordinate your next polar expedition?
+    </h2>
+    <p class="text-blue-100 text-base sm:text-lg mb-8 leading-relaxed max-w-2xl mx-auto">
+      Manage critical assets, expedition teams, and high-latitude logistics from one centralized platform.
+    </p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="{% url 'core:signup' %}"
+        class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl
+        bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-900/50 transition-all">
+        Get Started — It's Free
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+      <a href="{% url 'login' %}"
+        class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl
+        border border-white/30 text-white font-semibold text-sm hover:bg-white/10 transition-all">
+        Sign In
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer class="bg-[#07111F] text-slate-400 py-14 border-t border-[#243B5A]/80">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+
+      <!-- Brand Info -->
+      <div class="sm:col-span-2 lg:col-span-1">
+        <a href="{% url 'core:index' %}" class="flex items-center gap-2.5 font-bold text-lg text-white mb-3 tracking-tight">
+          <div class="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center text-white">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+            </svg>
+          </div>
+          PolarOps
+        </a>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Integrated Polar Expedition Logistics and Asset Management Platform for scientific and field research programs.
+        </p>
+      </div>
+
+      <!-- Platform Links -->
+      <div>
+        <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider mb-4">Platform</h4>
+        <ul class="space-y-2.5 text-xs">
+          <li><a href="#features" class="hover:text-blue-400 transition-colors">Features</a></li>
+          <li><a href="#how-it-works" class="hover:text-blue-400 transition-colors">How It Works</a></li>
+          <li><a href="#preview" class="hover:text-blue-400 transition-colors">Operations Center</a></li>
+          <li><a href="#about" class="hover:text-blue-400 transition-colors">Extreme Environments</a></li>
+        </ul>
+      </div>
+
+      <!-- Account Links -->
+      <div>
+        <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider mb-4">Account</h4>
+        <ul class="space-y-2.5 text-xs">
+          <li><a href="{% url 'login' %}" class="hover:text-blue-400 transition-colors">Sign In</a></li>
+          <li><a href="{% url 'core:signup' %}" class="hover:text-blue-400 transition-colors">Create Account</a></li>
+          <li><a href="{% url 'core:dashboard' %}" class="hover:text-blue-400 transition-colors">Dashboard</a></li>
+        </ul>
+      </div>
+
+      <!-- Project Metadata -->
+      <div>
+        <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider mb-4">Project</h4>
+        <p class="text-xs text-slate-400 leading-relaxed mb-2">
+          Academic demonstration platform for B.Tech Computer Science — Full Stack Web Development.
+        </p>
+        <span class="inline-block text-[11px] px-2.5 py-1 rounded-md bg-[#101D32] border border-[#243B5A] text-slate-300">
+          MongoDB Atlas + Django
+        </span>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="border-t border-[#12233F] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <span>© 2026 PolarOps. Academic / Demo project.</span>
+      <span>Built with Django ORM + Tailwind CSS + MongoDB Atlas</span>
+    </div>
+  </div>
+</footer>
+
+{% endblock %}

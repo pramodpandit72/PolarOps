@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}PolarOps | Expedition Logistics & Asset Management{% endblock %}</title>
+  <!-- Tailwind CSS v4 Play CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <!-- Force Tailwind v4 to use class-based dark mode instead of OS media query -->
+  <style type="text/tailwindcss">
+    @variant dark (&:where(.dark, .dark *));
+  </style>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <!-- Theme init: runs before render to prevent flash -->
+  <script>
+    (function(){
+      var t = localStorage.getItem('polarops-theme') || 'light';
+      if (t === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-slate-50 dark:bg-[#07111F] text-[#0B1628] dark:text-[#F8FAFC] antialiased min-h-screen flex flex-col transition-colors duration-300">
+
+  <!-- Mobile Top Bar -->
+  <header class="lg:hidden sticky top-0 z-40 bg-white/95 dark:bg-[#0B1628]/95 border-b border-slate-200 dark:border-[#243B5A] px-4 h-16 flex items-center justify-between nav-blur">
+    <a href="{% url 'operations:dashboard' %}" class="flex items-center gap-2 font-bold text-lg text-[#0B1628] dark:text-white">
+      <div class="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center text-white">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+      </div>
+      <span>Polar<span class="text-blue-600 dark:text-blue-400">Ops</span></span>
+    </a>
+    <div class="flex items-center gap-2">
+      <button data-theme-toggle aria-label="Toggle theme" class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-[#12233F]">
+        <svg class="w-5 h-5 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.66-9H21M3 12H2.34m15.36-6.36l-.71.71M6.05 17.66l-.71.71M17.66 17.66l-.71-.71M6.05 6.34l-.71-.71M12 7a5 5 0 100 10A5 5 0 0012 7z"/></svg>
+      </button>
+      <button id="sidebar-toggle" aria-label="Toggle Navigation" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#12233F]">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="flex-1 flex overflow-hidden">
+    <!-- Sidebar Backdrop for Mobile -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 z-40 hidden lg:hidden"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="app-sidebar" class="fixed lg:sticky top-0 h-screen w-64 bg-white dark:bg-[#0B1628] border-r border-slate-200 dark:border-[#243B5A] z-50 flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0">
+      <!-- Sidebar Brand Header -->
+      <div class="p-5 border-b border-slate-100 dark:border-[#243B5A]/60 flex items-center justify-between">
+        <a href="{% url 'operations:dashboard' %}" class="flex items-center gap-2.5 font-extrabold text-xl text-[#0B1628] dark:text-[#F8FAFC]">
+          <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm shadow-blue-500/30">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          </div>
+          <span>Polar<span class="text-blue-600 dark:text-blue-400">Ops</span></span>
+        </a>
+        <button id="sidebar-close" class="lg:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-[#12233F]">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="flex-1 overflow-y-auto p-4 space-y-6">
+        <!-- Main Section -->
+        <div>
+          <a href="{% url 'operations:dashboard' %}"
+            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors {% if request.resolver_match.url_name == 'dashboard' %}bg-blue-600 text-white shadow-sm shadow-blue-500/25{% else %}text-[#334155] dark:text-[#CBD5E1] hover:bg-slate-100 dark:hover:bg-[#101D32] hover:text-blue-600 dark:hover:text-blue-400{% endif %}">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            Dashboard
+          </a>
+        </div>
+
+        <!-- Operations Group -->
+        <div>
+          <p class="px-3.5 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">Operations</p>
+          <div class="space-y-1">
+            <!-- Expeditions -->
+            <a href="{% url 'operations:expedition_list' %}"
+              class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-colors {% if 'expedition' in request.resolver_match.url_name %}bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold border-l-4 border-blue-600{% else %}text-[#334155] dark:text-[#CBD5E1] hover:bg-slate-100 dark:hover:bg-[#101D32] hover:text-blue-600 dark:hover:text-blue-400{% endif %}">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+              Expeditions
+            </a>
+
+            <!-- Personnel -->
+            <a href="{% url 'operations:personnel_list' %}"
+              class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-colors {% if 'personnel' in request.resolver_match.url_name %}bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold border-l-4 border-blue-600{% else %}text-[#334155] dark:text-[#CBD5E1] hover:bg-slate-100 dark:hover:bg-[#101D32] hover:text-blue-600 dark:hover:text-blue-400{% endif %}">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Personnel
+            </a>
+
+            <!-- Assets -->
+            <a href="{% url 'operations:asset_list' %}"
+              class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-colors {% if 'asset' in request.resolver_match.url_name %}bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold border-l-4 border-blue-600{% else %}text-[#334155] dark:text-[#CBD5E1] hover:bg-slate-100 dark:hover:bg-[#101D32] hover:text-blue-600 dark:hover:text-blue-400{% endif %}">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+              Assets
+            </a>
+
+            <!-- Supplies -->
+            <a href="{% url 'operations:supply_list' %}"
+              class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-colors {% if 'supply' in request.resolver_match.url_name %}bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold border-l-4 border-blue-600{% else %}text-[#334155] dark:text-[#CBD5E1] hover:bg-slate-100 dark:hover:bg-[#101D32] hover:text-blue-600 dark:hover:text-blue-400{% endif %}">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+              Supplies
+            </a>
+
+            <!-- Logistics -->
+            <a href="{% url 'operations:logistics_list' %}"
+              class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-colors {% if 'logistics' in request.resolver_match.url_name %}bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold border-l-4 border-blue-600{% else %}text-[#334155] dark:text-[#CBD5E1] hover:bg-slate-100 dark:hover:bg-[#101D32] hover:text-blue-600 dark:hover:text-blue-400{% endif %}">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+              Logistics
+            </a>
+
+            <!-- Maintenance -->
+            <a href="{% url 'operations:maintenance_list' %}"
+              class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-colors {% if 'maintenance' in request.resolver_match.url_name %}bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold border-l-4 border-blue-600{% else %}text-[#334155] dark:text-[#CBD5E1] hover:bg-slate-100 dark:hover:bg-[#101D32] hover:text-blue-600 dark:hover:text-blue-400{% endif %}">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Maintenance
+            </a>
+
+            <!-- Tasks -->
+            <a href="{% url 'operations:task_list' %}"
+              class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-colors {% if 'task' in request.resolver_match.url_name %}bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold border-l-4 border-blue-600{% else %}text-[#334155] dark:text-[#CBD5E1] hover:bg-slate-100 dark:hover:bg-[#101D32] hover:text-blue-600 dark:hover:text-blue-400{% endif %}">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+              Tasks
+            </a>
+
+            <!-- Locations -->
+            <a href="{% url 'operations:location_list' %}"
+              class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-colors {% if 'location' in request.resolver_match.url_name %}bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold border-l-4 border-blue-600{% else %}text-[#334155] dark:text-[#CBD5E1] hover:bg-slate-100 dark:hover:bg-[#101D32] hover:text-blue-600 dark:hover:text-blue-400{% endif %}">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Locations
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Sidebar User & Footer Controls -->
+      <div class="p-4 border-t border-slate-200 dark:border-[#243B5A]/80 bg-slate-50/50 dark:bg-[#07111F]/50">
+        <!-- User Badge -->
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2.5 overflow-hidden">
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">
+              {{ request.user.username|slice:":1"|upper }}
+            </div>
+            <div class="truncate">
+              <p class="text-xs font-bold text-[#0B1628] dark:text-[#F8FAFC] truncate">{{ request.user.username }}</p>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Commander</p>
+            </div>
+          </div>
+          <!-- Theme toggle in sidebar -->
+          <button data-theme-toggle aria-label="Toggle theme" class="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-[#12233F] transition-colors">
+            <svg class="w-4 h-4 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+            <svg class="w-4 h-4 hidden dark:block text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.66-9H21M3 12H2.34m15.36-6.36l-.71.71M6.05 17.66l-.71.71M17.66 17.66l-.71-.71M6.05 6.34l-.71-.71M12 7a5 5 0 100 10A5 5 0 0012 7z"/></svg>
+          </button>
+        </div>
+
+        <!-- Links -->
+        <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-200/80 dark:border-[#243B5A]/60">
+          <a href="{% url 'core:index' %}" class="text-slate-500 hover:text-blue-600 dark:hover:text-blue-400">Public Site</a>
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="text-red-600 dark:text-red-400 hover:underline font-semibold">Sign Out</button>
+          </form>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <!-- Top header bar for desktop -->
+      <header class="hidden lg:flex sticky top-0 z-30 bg-white/90 dark:bg-[#07111F]/90 border-b border-slate-200 dark:border-[#243B5A] px-8 h-16 items-center justify-between nav-blur">
+        <div class="flex items-center gap-3">
+          <h1 class="text-base font-bold text-[#0B1628] dark:text-[#F8FAFC]">{% block page_title %}Polar Operations Platform{% endblock %}</h1>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
+            <span class="pulse-dot w-1.5 h-1.5 rounded-full bg-blue-600 inline-block"></span>
+            Telemetry Online
+          </span>
+          <span class="text-xs text-slate-500 dark:text-slate-400">Active Station: Svalbard Sector</span>
+        </div>
+      </header>
+
+      <!-- Django Messages Notice -->
+      {% if messages %}
+      <div class="px-4 sm:px-8 pt-4">
+        {% for message in messages %}
+        <div class="p-3.5 mb-2 rounded-xl text-sm font-medium flex items-center justify-between {% if message.tags == 'success' %}bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800{% elif message.tags == 'error' %}bg-red-50 dark:bg-red-950/50 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800{% else %}bg-blue-50 dark:bg-blue-950/50 text-blue-800 dark:text-blue-200 border border-blue-200 dark:border-blue-800{% endif %}">
+          <span>{{ message }}</span>
+          <button onclick="this.parentElement.remove()" class="opacity-70 hover:opacity-100">&times;</button>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- Page Content Block -->
+      <main class="flex-1 p-4 sm:p-8">
+        {% block app_content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer Toggle Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.getElementById('sidebar-toggle');
+      const close = document.getElementById('sidebar-close');
+      const sidebar = document.getElementById('app-sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+
+      function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        backdrop.classList.remove('hidden');
+      }
+      function closeSidebar() {
+        sidebar.classList.add('-translate-x-full');
+        backdrop.classList.add('hidden');
+      }
+
+      if (toggle) toggle.addEventListener('click', openSidebar);
+      if (close) close.addEventListener('click', closeSidebar);
+      if (backdrop) backdrop.addEventListener('click', closeSidebar);
+    });
+  </script>
+
+  <script src="{% static 'js/app.js' %}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

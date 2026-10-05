@@ -1,0 +1,351 @@
+/* ============================================================
+   PolarOps — Custom CSS
+   Arctic Navy + Ice Blue + Aurora Violet + Warm Amber Palette
+   ============================================================ */
+
+/* ---------- CSS Variables / Theme System ---------- */
+:root {
+  /* Brand Palette */
+  --polar-navy-midnight: #0B1628;
+  --polar-navy-deep: #12233F;
+  --polar-navy-card: #101D32;
+  --polar-navy-border: #243B5A;
+  
+  --polar-blue-arctic: #2563EB;
+  --polar-blue-hover: #1D4ED8;
+  --polar-blue-ice: #60A5FA;
+  --polar-blue-soft: #F0F7FF;
+  --polar-blue-subtle: #EAF4FF;
+  
+  --polar-violet-aurora: #7C3AED;
+  --polar-violet-light: #A78BFA;
+  
+  --polar-amber-warm: #F59E0B;
+  --polar-amber-light: #FBBF24;
+  
+  /* Neutrals */
+  --polar-slate-heading: #0B1628;
+  --polar-slate-body: #334155;
+  --polar-slate-muted: #64748B;
+  --polar-slate-border: #E2E8F0;
+
+  --transition: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------- Dark Mode ---------- */
+.dark {
+  color-scheme: dark;
+}
+
+/* ---------- Smooth Scrolling ---------- */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ---------- Aurora Background Animation ---------- */
+@keyframes aurora-drift {
+  0%, 100% { transform: translateX(0) translateY(0) scale(1); opacity: 0.45; }
+  33%       { transform: translateX(35px) translateY(-25px) scale(1.06); opacity: 0.6; }
+  66%       { transform: translateX(-20px) translateY(18px) scale(0.96); opacity: 0.5; }
+}
+
+@keyframes aurora-drift-2 {
+  0%, 100% { transform: translateX(0) translateY(0) scale(1.08); opacity: 0.35; }
+  50%       { transform: translateX(-40px) translateY(30px) scale(1); opacity: 0.55; }
+}
+
+@keyframes aurora-drift-3 {
+  0%, 100% { transform: translateX(0) scale(1); opacity: 0.3; }
+  40%       { transform: translateX(25px) translateY(-20px) scale(1.05); opacity: 0.45; }
+}
+
+.aurora-blob-1 {
+  animation: aurora-drift 14s ease-in-out infinite;
+}
+.aurora-blob-2 {
+  animation: aurora-drift-2 18s ease-in-out infinite;
+}
+.aurora-blob-3 {
+  animation: aurora-drift-3 22s ease-in-out infinite;
+}
+
+/* ---------- Floating Cards ---------- */
+@keyframes card-float {
+  0%, 100% { transform: translateY(0px) rotate(-0.5deg); }
+  50%       { transform: translateY(-10px) rotate(-0.5deg); }
+}
+@keyframes card-float-2 {
+  0%, 100% { transform: translateY(0px) rotate(1deg); }
+  50%       { transform: translateY(-8px) rotate(1deg); }
+}
+@keyframes card-float-3 {
+  0%, 100% { transform: translateY(-3px) rotate(-0.5deg); }
+  50%       { transform: translateY(5px) rotate(-0.5deg); }
+}
+
+.float-card-1 { animation: card-float   5.5s ease-in-out infinite; }
+.float-card-2 { animation: card-float-2 6.5s ease-in-out infinite; }
+.float-card-3 { animation: card-float-3 7.5s ease-in-out infinite; }
+
+/* ---------- Pulse Dot ---------- */
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.4); opacity: 0.5; }
+}
+.pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+/* ---------- Shimmer & Gradient Text ---------- */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    #2563EB 0%,
+    #4F46E5 40%,
+    #7C3AED 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dark .gradient-text {
+  background: linear-gradient(
+    135deg,
+    #60A5FA 0%,
+    #818CF8 50%,
+    #A78BFA 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-animate {
+  background: linear-gradient(
+    90deg,
+    #2563EB 0%,
+    #60A5FA 25%,
+    #7C3AED 50%,
+    #60A5FA 75%,
+    #2563EB 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 5s linear infinite;
+}
+
+.dark .gradient-text-animate {
+  background: linear-gradient(
+    90deg,
+    #60A5FA 0%,
+    #93C5FD 25%,
+    #A78BFA 50%,
+    #93C5FD 75%,
+    #60A5FA 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 5s linear infinite;
+}
+
+/* ---------- Glassmorphism Cards ---------- */
+.glass {
+  background: rgba(16, 29, 50, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(36, 59, 90, 0.6);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+/* ---------- Navbar Backdrop ---------- */
+.nav-blur {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ---------- Hero Background ---------- */
+.hero-bg {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(37, 99, 235, 0.08), transparent),
+              linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 60%, #F0F7FF 100%);
+}
+.dark .hero-bg {
+  background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(37, 99, 235, 0.16), transparent),
+              radial-gradient(ellipse 60% 40% at 85% 30%, rgba(124, 58, 237, 0.1), transparent),
+              linear-gradient(180deg, #07111F 0%, #0B1628 100%);
+}
+
+/* ---------- Buttons ---------- */
+.btn-primary {
+  background-color: var(--polar-blue-arctic);
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.btn-primary:hover {
+  background-color: var(--polar-blue-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.35);
+}
+
+.btn-secondary {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px -2px rgba(18, 35, 63, 0.08);
+}
+
+/* ---------- Feature Cards ---------- */
+.feature-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 32px -8px rgba(11, 22, 40, 0.08);
+  border-color: rgba(37, 99, 235, 0.4);
+}
+.dark .feature-card:hover {
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.4), 0 0 20px -4px rgba(37, 99, 235, 0.15);
+  border-color: rgba(96, 165, 250, 0.4);
+}
+
+/* ---------- Scroll Reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Text Entrance Animations ---------- */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-fade-in {
+  animation: fade-in 0.6s ease forwards;
+}
+.delay-100 { animation-delay: 0.08s; opacity: 0; }
+.delay-200 { animation-delay: 0.16s; opacity: 0; }
+.delay-300 { animation-delay: 0.24s; opacity: 0; }
+.delay-400 { animation-delay: 0.32s; opacity: 0; }
+.delay-500 { animation-delay: 0.4s; opacity: 0; }
+.delay-600 { animation-delay: 0.48s; opacity: 0; }
+
+/* ---------- Stat Counter ---------- */
+.stat-number {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ---------- Polar Wave Divider ---------- */
+.wave-divider svg {
+  display: block;
+}
+
+/* ---------- Auth Forms ---------- */
+.auth-form p {
+  margin-bottom: 1.25rem;
+}
+.auth-form label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.375rem;
+  color: var(--polar-slate-heading);
+}
+.dark .auth-form label {
+  color: #E2E8F0;
+}
+.auth-form input[type="text"],
+.auth-form input[type="password"],
+.auth-form input[type="email"] {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.5rem;
+  border: 1px solid #CBD5E1;
+  background-color: #FFFFFF;
+  color: #0B1628;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.dark .auth-form input[type="text"],
+.dark .auth-form input[type="password"],
+.dark .auth-form input[type="email"] {
+  border-color: #243B5A;
+  background-color: #101D32;
+  color: #F8FAFC;
+}
+.auth-form input:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+.dark .auth-form input:focus {
+  border-color: #60A5FA;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+.auth-form .helptext {
+  display: block;
+  font-size: 0.75rem;
+  color: #64748B;
+  margin-top: 0.375rem;
+  line-height: 1.4;
+}
+.dark .auth-form .helptext {
+  color: #94A3B8;
+}
+.auth-form .errorlist {
+  color: #EF4444;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  list-style: none;
+  padding: 0;
+}
+
+/* ---------- Respect prefers-reduced-motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  .aurora-blob-1,
+  .aurora-blob-2,
+  .aurora-blob-3,
+  .float-card-1,
+  .float-card-2,
+  .float-card-3,
+  .animate-fade-up,
+  .animate-fade-in,
+  .gradient-text-animate,
+  .pulse-dot {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

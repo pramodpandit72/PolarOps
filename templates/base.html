@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}PolarOps | Polar Expedition Logistics & Asset Management{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}PolarOps — Enterprise Polar Expedition Logistics and Asset Management Platform for scientific and field research teams.{% endblock %}">
+  <!-- Tailwind CSS v4 Play CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <!-- Force Tailwind v4 to use class-based dark mode instead of OS media query -->
+  <style type="text/tailwindcss">
+    @variant dark (&:where(.dark, .dark *));
+  </style>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <!-- Theme init (before body renders to prevent flicker) -->
+  <script>
+    (function(){
+      var t = localStorage.getItem('polarops-theme') || 'light';
+      if (t === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+  {% block head_extra %}{% endblock %}
+</head>
+<body class="bg-white dark:bg-[#07111F] text-slate-800 dark:text-slate-100 transition-colors duration-300 antialiased selection:bg-blue-500/20 selection:text-blue-900 dark:selection:text-blue-200">
+
+{% block content %}{% endblock %}
+
+<script src="{% static 'js/app.js' %}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,266 @@
+{% extends 'app_base.html' %}
+
+{% block title %}Dashboard | PolarOps Operations Center{% endblock %}
+{% block page_title %}Operations Command Center{% endblock %}
+
+{% block app_content %}
+<!-- Welcome Header & Quick Action Row -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+  <div>
+    <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0B1628] dark:text-[#F8FAFC] tracking-tight">
+      Expedition Telemetry Overview
+    </h2>
+    <p class="text-sm text-[#475569] dark:text-[#94A3B8] mt-1">
+      Real-time operational status computed from active field deployments and MongoDB Atlas assets.
+    </p>
+  </div>
+  <div class="flex flex-wrap items-center gap-2.5">
+    <a href="{% url 'operations:expedition_create' %}" class="btn-primary inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 text-white font-semibold text-xs shadow-sm hover:bg-blue-700">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+      New Expedition
+    </a>
+    <a href="{% url 'operations:asset_create' %}" class="btn-secondary inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-300 dark:border-[#243B5A] text-[#0B1628] dark:text-[#F8FAFC] font-semibold text-xs bg-white dark:bg-[#101D32] hover:bg-slate-50 dark:hover:bg-[#12233F]">
+      Register Asset
+    </a>
+  </div>
+</div>
+
+<!-- 6 Core Metric Cards -->
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+  <!-- Active Expeditions -->
+  <a href="{% url 'operations:expedition_list' %}?status=Active" class="bg-white dark:bg-[#101D32] p-4 rounded-2xl border border-slate-200 dark:border-[#243B5A] hover:border-blue-500 transition-all shadow-sm">
+    <p class="text-xs font-semibold text-[#475569] dark:text-[#94A3B8]">Active Expeditions</p>
+    <p class="text-3xl font-extrabold text-blue-600 dark:text-blue-400 mt-1.5">{{ active_expeditions_count }}</p>
+    <p class="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+      <span class="w-1.5 h-1.5 rounded-full bg-blue-600 inline-block"></span>
+      Deployed in field
+    </p>
+  </a>
+
+  <!-- Total Personnel -->
+  <a href="{% url 'operations:personnel_list' %}?status=Active" class="bg-white dark:bg-[#101D32] p-4 rounded-2xl border border-slate-200 dark:border-[#243B5A] hover:border-indigo-500 transition-all shadow-sm">
+    <p class="text-xs font-semibold text-[#475569] dark:text-[#94A3B8]">Active Personnel</p>
+    <p class="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-1.5">{{ personnel_count }}</p>
+    <p class="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+      <span class="w-1.5 h-1.5 rounded-full bg-indigo-600 inline-block"></span>
+      Scientists & crew
+    </p>
+  </a>
+
+  <!-- Operational Assets -->
+  <a href="{% url 'operations:asset_list' %}" class="bg-white dark:bg-[#101D32] p-4 rounded-2xl border border-slate-200 dark:border-[#243B5A] hover:border-purple-500 transition-all shadow-sm">
+    <p class="text-xs font-semibold text-[#475569] dark:text-[#94A3B8]">Operational Assets</p>
+    <p class="text-3xl font-extrabold text-purple-600 dark:text-purple-400 mt-1.5">{{ operational_assets_count }}</p>
+    <p class="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+      <span class="w-1.5 h-1.5 rounded-full bg-purple-600 inline-block"></span>
+      Ready / in service
+    </p>
+  </a>
+
+  <!-- Pending Tasks -->
+  <a href="{% url 'operations:task_list' %}?status=Pending" class="bg-white dark:bg-[#101D32] p-4 rounded-2xl border border-slate-200 dark:border-[#243B5A] hover:border-sky-500 transition-all shadow-sm">
+    <p class="text-xs font-semibold text-[#475569] dark:text-[#94A3B8]">Pending Tasks</p>
+    <p class="text-3xl font-extrabold text-sky-600 dark:text-sky-400 mt-1.5">{{ pending_tasks_count }}</p>
+    <p class="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+      <span class="w-1.5 h-1.5 rounded-full bg-sky-600 inline-block"></span>
+      Requires action
+    </p>
+  </a>
+
+  <!-- Low Stock Supplies -->
+  <a href="{% url 'operations:supply_list' %}?low_stock=true" class="bg-white dark:bg-[#101D32] p-4 rounded-2xl border border-slate-200 dark:border-[#243B5A] hover:border-amber-500 transition-all shadow-sm">
+    <p class="text-xs font-semibold text-[#475569] dark:text-[#94A3B8]">Low Stock Supplies</p>
+    <p class="text-3xl font-extrabold text-amber-600 dark:text-amber-400 mt-1.5">{{ low_stock_count }}</p>
+    <p class="text-[11px] text-amber-700 dark:text-amber-300 mt-1 flex items-center gap-1">
+      <span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>
+      Under min threshold
+    </p>
+  </a>
+
+  <!-- Maintenance Due -->
+  <a href="{% url 'operations:asset_list' %}?maint=attention" class="bg-white dark:bg-[#101D32] p-4 rounded-2xl border border-slate-200 dark:border-[#243B5A] hover:border-red-500 transition-all shadow-sm">
+    <p class="text-xs font-semibold text-[#475569] dark:text-[#94A3B8]">Maintenance Attention</p>
+    <p class="text-3xl font-extrabold text-red-600 dark:text-red-400 mt-1.5">{{ maintenance_due_count }}</p>
+    <p class="text-[11px] text-red-700 dark:text-red-300 mt-1 flex items-center gap-1">
+      <span class="w-1.5 h-1.5 rounded-full bg-red-500 inline-block"></span>
+      Overdue or soon
+    </p>
+  </a>
+</div>
+
+<!-- Main Operational Grid -->
+<div class="grid lg:grid-cols-3 gap-8 mb-8">
+  <!-- Active Expeditions Table (2 cols) -->
+  <div class="lg:col-span-2 bg-white dark:bg-[#101D32] rounded-2xl border border-slate-200 dark:border-[#243B5A] shadow-sm overflow-hidden flex flex-col">
+    <div class="p-5 border-b border-slate-100 dark:border-[#243B5A] flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+        <h3 class="font-bold text-[#0B1628] dark:text-[#F8FAFC] text-sm">Active Expeditions</h3>
+      </div>
+      <a href="{% url 'operations:expedition_list' %}" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+        View All Expeditions &rarr;
+      </a>
+    </div>
+
+    <div class="overflow-x-auto flex-1">
+      <table class="w-full text-left text-xs">
+        <thead class="bg-slate-50/75 dark:bg-[#07111F]/75 text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-[#243B5A]">
+          <tr>
+            <th class="px-5 py-3 font-semibold">Expedition</th>
+            <th class="px-4 py-3 font-semibold">Location</th>
+            <th class="px-4 py-3 font-semibold">Timeline</th>
+            <th class="px-4 py-3 font-semibold">Status</th>
+            <th class="px-4 py-3 font-semibold text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 dark:divide-[#243B5A]/60">
+          {% for exp in active_expeditions %}
+          <tr class="hover:bg-slate-50/50 dark:hover:bg-[#12233F]/50 transition-colors">
+            <td class="px-5 py-3.5">
+              <a href="{% url 'operations:expedition_detail' exp.pk %}" class="font-bold text-[#0B1628] dark:text-[#F8FAFC] hover:text-blue-600 dark:hover:text-blue-400">
+                {{ exp.name }}
+              </a>
+              <p class="text-[11px] text-slate-400 font-mono mt-0.5">{{ exp.expedition_id }}</p>
+            </td>
+            <td class="px-4 py-3.5 text-[#334155] dark:text-[#CBD5E1]">
+              {{ exp.location.name|default:"Remote Coordinates" }}
+            </td>
+            <td class="px-4 py-3.5 text-[#475569] dark:text-[#94A3B8]">
+              {{ exp.start_date|date:"M d" }} — {{ exp.end_date|date:"M d, Y" }}
+            </td>
+            <td class="px-4 py-3.5">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                {{ exp.status }}
+              </span>
+            </td>
+            <td class="px-4 py-3.5 text-right">
+              <a href="{% url 'operations:expedition_detail' exp.pk %}" class="inline-flex items-center gap-1 font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+                View &rarr;
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" class="px-5 py-8 text-center text-slate-400">
+              No active expeditions currently in field.
+              <a href="{% url 'operations:expedition_create' %}" class="block text-blue-600 hover:underline mt-1 font-semibold">Launch a new expedition</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Operational Alerts (1 col) -->
+  <div class="space-y-6">
+    <!-- Maintenance Alerts Panel -->
+    <div class="bg-white dark:bg-[#101D32] rounded-2xl border border-slate-200 dark:border-[#243B5A] shadow-sm p-5">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 dark:border-[#243B5A]">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+          <h4 class="font-bold text-xs uppercase tracking-wider text-[#0B1628] dark:text-[#F8FAFC]">Asset Maintenance Notices</h4>
+        </div>
+        <a href="{% url 'operations:asset_list' %}?maint=attention" class="text-xs text-blue-600 dark:text-blue-400 hover:underline">View</a>
+      </div>
+
+      <div class="space-y-3">
+        {% for ast in maintenance_alerts %}
+        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-[#07111F] border border-slate-100 dark:border-[#243B5A] text-xs">
+          <div class="flex justify-between items-center mb-1">
+            <a href="{% url 'operations:asset_detail' ast.pk %}" class="font-bold text-[#0B1628] dark:text-[#F8FAFC] hover:underline truncate">
+              {{ ast.name }}
+            </a>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full {% if ast.maintenance_status.0 == 'overdue' %}bg-red-50 text-red-700 dark:bg-red-950/50 dark:text-red-300 border border-red-200 dark:border-red-900{% else %}bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300 border border-amber-200 dark:border-amber-900{% endif %}">
+              {{ ast.maintenance_status.1 }}
+            </span>
+          </div>
+          <p class="text-slate-400 text-[11px]">Due: {{ ast.next_maintenance_date|default:"Immediate" }} • {{ ast.category }}</p>
+        </div>
+        {% empty %}
+        <p class="text-xs text-slate-400 py-3 text-center">All assets are within safe maintenance operating window.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Low Stock Inventory Panel -->
+    <div class="bg-white dark:bg-[#101D32] rounded-2xl border border-slate-200 dark:border-[#243B5A] shadow-sm p-5">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 dark:border-[#243B5A]">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          <h4 class="font-bold text-xs uppercase tracking-wider text-[#0B1628] dark:text-[#F8FAFC]">Low Stock Depots</h4>
+        </div>
+        <a href="{% url 'operations:supply_list' %}?low_stock=true" class="text-xs text-blue-600 dark:text-blue-400 hover:underline">View</a>
+      </div>
+
+      <div class="space-y-2.5">
+        {% for sup in low_stock_items %}
+        <div class="flex justify-between items-center text-xs p-2 rounded-lg bg-slate-50 dark:bg-[#07111F] border border-slate-100 dark:border-[#243B5A]">
+          <span class="font-medium text-[#0B1628] dark:text-[#F8FAFC] truncate max-w-[160px]">{{ sup.name }}</span>
+          <span class="text-red-600 dark:text-red-400 font-bold">{{ sup.quantity }} / {{ sup.minimum_required_quantity }} {{ sup.unit }}</span>
+        </div>
+        {% empty %}
+        <p class="text-xs text-slate-400 py-3 text-center">All supply reserves are above minimum thresholds.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Secondary Section: Critical Tasks & Recent Activity -->
+<div class="grid lg:grid-cols-2 gap-8">
+  <!-- Critical Tasks -->
+  <div class="bg-white dark:bg-[#101D32] rounded-2xl border border-slate-200 dark:border-[#243B5A] p-5 shadow-sm">
+    <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100 dark:border-[#243B5A]">
+      <h3 class="font-bold text-sm text-[#0B1628] dark:text-[#F8FAFC]">Critical & High Priority Tasks</h3>
+      <a href="{% url 'operations:task_list' %}" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">All Tasks &rarr;</a>
+    </div>
+
+    <div class="space-y-3">
+      {% for t in critical_tasks %}
+      <div class="p-3 rounded-xl bg-slate-50/70 dark:bg-[#07111F]/70 border border-slate-200/80 dark:border-[#243B5A] flex items-center justify-between gap-3 text-xs">
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-[#0B1628] dark:text-[#F8FAFC] truncate">{{ t.title }}</p>
+          <p class="text-slate-400 text-[11px] mt-0.5">
+            Assigned: {{ t.assigned_personnel.name|default:"Unassigned" }} • Due: {{ t.due_date|default:"ASAP" }}
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded-full font-bold text-[10px] {% if t.priority == 'Critical' %}bg-red-50 text-red-700 dark:bg-red-950/60 dark:text-red-300 border border-red-200 dark:border-red-900{% else %}bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-900{% endif %}">
+            {{ t.priority }}
+          </span>
+          <a href="{% url 'operations:task_toggle_complete' t.pk %}" class="p-1 rounded text-slate-400 hover:text-emerald-600" title="Mark Complete">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          </a>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-xs text-slate-400 py-6 text-center">No critical or high-priority tasks pending.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Recent Activity Log -->
+  <div class="bg-white dark:bg-[#101D32] rounded-2xl border border-slate-200 dark:border-[#243B5A] p-5 shadow-sm">
+    <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100 dark:border-[#243B5A]">
+      <h3 class="font-bold text-sm text-[#0B1628] dark:text-[#F8FAFC]">Operations Audit & Activity Log</h3>
+      <span class="text-xs text-slate-400">Live feed</span>
+    </div>
+
+    <div class="space-y-3">
+      {% for act in recent_activities %}
+      <div class="flex items-start gap-3 text-xs">
+        <div class="w-2 h-2 rounded-full bg-blue-600 mt-1.5 flex-shrink-0"></div>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-[#0B1628] dark:text-[#F8FAFC]">{{ act.action }}</p>
+          <p class="text-slate-500 dark:text-slate-400 text-[11px] leading-tight mt-0.5">{{ act.details }}</p>
+        </div>
+        <span class="text-[10px] text-slate-400 flex-shrink-0 font-mono">{{ act.created_at|date:"H:i" }}</span>
+      </div>
+      {% empty %}
+      <p class="text-xs text-slate-400 py-6 text-center">No recent operations logged yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
