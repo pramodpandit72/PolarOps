@@ -64,10 +64,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # -------------------------------------------------------------------
 # Database — MongoDB Atlas
 # -------------------------------------------------------------------
-MONGODB_URI = os.environ.get(
-    'MONGODB_URI',
-    'mongodb+srv://nwdankit701_db_user:dzTvt3ZD7LjbuwXb@ploaropscluster.s7vlzwp.mongodb.net/?appName=PloarOpsCluster'
-)
+MONGODB_URI = os.environ['MONGODB_URI']  # Must be set in .env or hosting env vars
 
 DATABASES = {
     'default': {
