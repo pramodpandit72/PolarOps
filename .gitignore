@@ -16,3 +16,7 @@ staticfiles/
 # OS
 .DS_Store
 Thumbs.db
+
+about.md
+project_workflow.md
+artitecture.md
