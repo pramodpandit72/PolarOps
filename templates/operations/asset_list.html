@@ -1,30 +1,34 @@
 {% extends 'app_base.html' %}
 
-{% block title %}Assets & Equipment | PolarOps{% endblock %}
+{% block title %}Assets &amp; Equipment | PolarOps{% endblock %}
 {% block page_title %}Asset Management{% endblock %}
 
 {% block app_content %}
 <!-- Header Bar -->
-<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 mb-6 border-b border-[#E2E8F0] dark:border-[#334155]">
   <div>
-    <h2 class="text-2xl font-extrabold text-[#0B1628] dark:text-[#F8FAFC]">Polar Assets & Equipment</h2>
-    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Track cold-weather machinery, transport vehicles, scientific instruments, and satellite gear.</p>
+    <h2 class="text-2xl font-bold text-[#14532D] dark:text-[#DCFCE7]">Polar Assets &amp; Equipment</h2>
+    <p class="text-xs text-[#475569] dark:text-[#94A3B8] mt-1">Track cold-weather machinery, transport vehicles, scientific instruments, and satellite gear.</p>
   </div>
-  <a href="{% url 'operations:asset_create' %}" class="btn-primary inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-xs shadow-sm hover:bg-blue-700 self-start">
-    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+  <a href="{% url 'operations:asset_create' %}" class="btn-primary px-4 py-2.5 text-xs self-start">
+    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
     Register Asset
   </a>
 </div>
 
 <!-- Search & Filters -->
-<div class="bg-white dark:bg-[#101D32] p-4 rounded-2xl border border-slate-200 dark:border-[#243B5A] shadow-sm mb-6">
+<div class="gov-card p-4 mb-6">
   <form method="get" class="flex flex-wrap items-center gap-3">
     <div class="flex-1 min-w-[200px]">
-      <input type="text" name="q" value="{{ q }}" placeholder="Search by asset name, ID, or serial number..."
-        class="w-full px-3.5 py-2 rounded-xl text-xs border border-slate-300 dark:border-[#243B5A] bg-slate-50/50 dark:bg-[#07111F] text-[#0B1628] dark:text-[#F8FAFC] focus:outline-none focus:border-blue-600">
+      <label for="ast-search" class="sr-only">Search assets</label>
+      <input id="ast-search" type="text" name="q" value="{{ q }}" placeholder="Search by asset name, ID, or serial number..."
+        class="w-full h-10 px-3.5 rounded-md text-xs border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#0B1220] text-[#0F172A] dark:text-[#F8FAFC] placeholder:text-slate-400 focus:outline-none focus:border-[#15803D]">
     </div>
     <div>
-      <select name="category" class="px-3 py-2 rounded-xl text-xs border border-slate-300 dark:border-[#243B5A] bg-slate-50/50 dark:bg-[#07111F] text-[#0B1628] dark:text-[#F8FAFC]">
+      <label for="ast-category" class="sr-only">Filter by category</label>
+      <select id="ast-category" name="category" class="h-10 px-3 rounded-md text-xs border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#0B1220] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#15803D]">
         <option value="">All Categories</option>
         {% for val, label in category_choices %}
         <option value="{{ val }}" {% if category_filter == val %}selected{% endif %}>{{ label }}</option>
@@ -32,79 +36,80 @@
       </select>
     </div>
     <div>
-      <select name="status" class="px-3 py-2 rounded-xl text-xs border border-slate-300 dark:border-[#243B5A] bg-slate-50/50 dark:bg-[#07111F] text-[#0B1628] dark:text-[#F8FAFC]">
+      <label for="ast-status" class="sr-only">Filter by status</label>
+      <select id="ast-status" name="status" class="h-10 px-3 rounded-md text-xs border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#0B1220] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#15803D]">
         <option value="">All Statuses</option>
         {% for val, label in status_choices %}
         <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
         {% endfor %}
       </select>
     </div>
-    <button type="submit" class="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700">Filter</button>
+    <button type="submit" class="btn-primary h-10 px-4 text-xs">Filter</button>
     {% if q or category_filter or status_filter or maint_filter %}
-    <a href="{% url 'operations:asset_list' %}" class="text-xs text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 py-2">Clear</a>
+    <a href="{% url 'operations:asset_list' %}" class="btn-outline-neutral h-10 px-3.5 text-xs">Clear</a>
     {% endif %}
   </form>
 </div>
 
 <!-- Assets Table -->
-<div class="bg-white dark:bg-[#101D32] rounded-2xl border border-slate-200 dark:border-[#243B5A] shadow-sm overflow-hidden">
+<div class="gov-card overflow-hidden">
   <div class="overflow-x-auto">
     <table class="w-full text-left text-xs">
-      <thead class="bg-slate-50 dark:bg-[#07111F] text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-[#243B5A]">
+      <thead class="bg-[#F0FDF4] dark:bg-[#111C2E] text-[#14532D] dark:text-[#DCFCE7] uppercase tracking-wider border-b border-[#E2E8F0] dark:border-[#334155]">
         <tr>
-          <th class="px-5 py-3 font-semibold">Asset ID</th>
-          <th class="px-5 py-3 font-semibold">Asset Name & Category</th>
-          <th class="px-4 py-3 font-semibold">Current Base</th>
-          <th class="px-4 py-3 font-semibold">Assigned Expedition</th>
-          <th class="px-4 py-3 font-semibold">Maintenance Status</th>
-          <th class="px-4 py-3 font-semibold">Operational Status</th>
-          <th class="px-5 py-3 font-semibold text-right">Actions</th>
+          <th class="px-5 py-3 font-bold">Asset ID</th>
+          <th class="px-5 py-3 font-bold">Asset Name &amp; Category</th>
+          <th class="px-4 py-3 font-bold">Current Base</th>
+          <th class="px-4 py-3 font-bold">Assigned Expedition</th>
+          <th class="px-4 py-3 font-bold">Maintenance Status</th>
+          <th class="px-4 py-3 font-bold">Operational Status</th>
+          <th class="px-5 py-3 font-bold text-right">Actions</th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-slate-100 dark:divide-[#243B5A]/60">
+      <tbody class="divide-y divide-[#E2E8F0] dark:divide-[#334155]">
         {% for a in assets %}
-        <tr class="hover:bg-slate-50/50 dark:hover:bg-[#12233F]/50 transition-colors">
-          <td class="px-5 py-3.5 font-mono text-purple-600 dark:text-purple-400 font-bold">
+        <tr class="hover:bg-[#F0FDF4]/50 dark:hover:bg-[#111C2E]/60 transition-colors">
+          <td class="px-5 py-3.5 font-mono text-[#0F766E] dark:text-[#5EEAD4] font-bold">
             {{ a.asset_id }}
           </td>
           <td class="px-5 py-3.5">
-            <a href="{% url 'operations:asset_detail' a.pk %}" class="font-bold text-[#0B1628] dark:text-[#F8FAFC] hover:text-blue-600 dark:hover:text-blue-400 text-sm">
+            <a href="{% url 'operations:asset_detail' a.pk %}" class="font-bold text-[#0F172A] dark:text-[#F8FAFC] hover:text-[#15803D] dark:hover:text-[#86EFAC] text-sm">
               {{ a.name }}
             </a>
-            <p class="text-[11px] text-slate-400 mt-0.5">{{ a.category }} {% if a.serial_number %}• SN: {{ a.serial_number }}{% endif %}</p>
+            <p class="text-[11px] text-[#475569] dark:text-[#94A3B8] mt-0.5">{{ a.category }}{% if a.serial_number %} &bull; SN: {{ a.serial_number }}{% endif %}</p>
           </td>
           <td class="px-4 py-3.5 text-[#334155] dark:text-[#CBD5E1]">
             {{ a.location.name|default:"Depot Storage" }}
           </td>
           <td class="px-4 py-3.5">
             {% if a.expedition %}
-            <a href="{% url 'operations:expedition_detail' a.expedition.pk %}" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+            <a href="{% url 'operations:expedition_detail' a.expedition.pk %}" class="text-[#15803D] dark:text-[#86EFAC] font-semibold hover:underline">
               {{ a.expedition.name }}
             </a>
             {% else %}
-            <span class="text-slate-400 italic">Unassigned</span>
+            <span class="text-[#475569] dark:text-[#94A3B8] italic">Unassigned</span>
             {% endif %}
           </td>
           <td class="px-4 py-3.5">
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold {% if a.maintenance_status.0 == 'overdue' %}bg-red-50 text-red-700 dark:bg-red-950/60 dark:text-red-300 border border-red-200 dark:border-red-900{% elif a.maintenance_status.0 == 'soon' %}bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-900{% else %}bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800{% endif %}">
-              <span class="w-1.5 h-1.5 rounded-full {% if a.maintenance_status.0 == 'overdue' %}bg-red-500{% elif a.maintenance_status.0 == 'soon' %}bg-amber-500{% else %}bg-emerald-500{% endif %}"></span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[10px] font-bold {% if a.maintenance_status.0 == 'overdue' %}bg-red-100 text-[#991B1B] dark:bg-red-950/60 dark:text-[#FCA5A5] border border-red-200 dark:border-red-900{% elif a.maintenance_status.0 == 'soon' %}bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-900{% else %}bg-[#DCFCE7] text-[#14532D] dark:bg-[#14532D]/60 dark:text-[#DCFCE7] border border-[#BBF7D0] dark:border-[#15803D]{% endif %}">
+              <span class="w-1.5 h-1.5 rounded-full {% if a.maintenance_status.0 == 'overdue' %}bg-red-600{% elif a.maintenance_status.0 == 'soon' %}bg-amber-500{% else %}bg-[#15803D]{% endif %}"></span>
               {{ a.maintenance_status.1 }}
             </span>
           </td>
           <td class="px-4 py-3.5">
-            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold {% if a.status == 'Available' %}bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300{% elif a.status == 'In Use' %}bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300{% elif a.status == 'Under Maintenance' %}bg-amber-50 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300{% else %}bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400{% endif %}">
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold {% if a.status == 'Available' %}bg-[#DCFCE7] text-[#14532D] dark:bg-[#14532D]/60 dark:text-[#DCFCE7]{% elif a.status == 'In Use' %}bg-[#CCFBF1] text-[#0F766E] dark:bg-[#0F766E]/40 dark:text-[#CCFBF1]{% elif a.status == 'Under Maintenance' %}bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300{% else %}bg-slate-100 text-[#334155] dark:bg-slate-800 dark:text-[#CBD5E1]{% endif %}">
               {{ a.status }}
             </span>
           </td>
-          <td class="px-5 py-3.5 text-right space-x-2">
-            <a href="{% url 'operations:asset_detail' a.pk %}" class="font-semibold text-blue-600 dark:text-blue-400 hover:underline">View</a>
-            <a href="{% url 'operations:asset_edit' a.pk %}" class="font-semibold text-slate-500 hover:text-blue-600 dark:hover:text-blue-400">Edit</a>
-            <a href="{% url 'operations:asset_delete' a.pk %}" class="font-semibold text-red-500 hover:text-red-700">Delete</a>
+          <td class="px-5 py-3.5 text-right space-x-3 whitespace-nowrap">
+            <a href="{% url 'operations:asset_detail' a.pk %}" class="font-semibold text-[#15803D] dark:text-[#86EFAC] hover:underline">View</a>
+            <a href="{% url 'operations:asset_edit' a.pk %}" class="font-semibold text-[#334155] dark:text-[#CBD5E1] hover:text-[#15803D] dark:hover:text-[#86EFAC] hover:underline">Edit</a>
+            <a href="{% url 'operations:asset_delete' a.pk %}" class="font-semibold text-[#B91C1C] dark:text-[#FCA5A5] hover:underline">Delete</a>
           </td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="7" class="px-5 py-10 text-center text-slate-400">
+          <td colspan="7" class="px-5 py-10 text-center text-[#475569] dark:text-[#94A3B8]">
             No equipment found matching current filters.
           </td>
         </tr>

@@ -4,21 +4,21 @@ from .models import (
 )
 
 TAILWIND_INPUT = (
-    "w-full px-3.5 py-2.5 rounded-lg border border-slate-300 dark:border-[#243B5A] "
-    "bg-white dark:bg-[#101D32] text-[#0B1628] dark:text-[#F8FAFC] "
-    "focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-sm transition-all"
+    "w-full h-10 px-3.5 py-2 rounded-md border border-[#CBD5E1] dark:border-[#334155] "
+    "bg-white dark:bg-[#0B1220] text-[#0F172A] dark:text-[#F8FAFC] placeholder:text-slate-400 dark:placeholder:text-slate-500 "
+    "focus:outline-none focus:border-[#15803D] dark:focus:border-[#22C55E] focus:ring-2 focus:ring-[#15803D]/20 text-sm transition-colors"
 )
 
 TAILWIND_SELECT = (
-    "w-full px-3.5 py-2.5 rounded-lg border border-slate-300 dark:border-[#243B5A] "
-    "bg-white dark:bg-[#101D32] text-[#0B1628] dark:text-[#F8FAFC] "
-    "focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-sm transition-all"
+    "w-full h-10 px-3.5 py-2 rounded-md border border-[#CBD5E1] dark:border-[#334155] "
+    "bg-white dark:bg-[#0B1220] text-[#0F172A] dark:text-[#F8FAFC] "
+    "focus:outline-none focus:border-[#15803D] dark:focus:border-[#22C55E] focus:ring-2 focus:ring-[#15803D]/20 text-sm transition-colors"
 )
 
 TAILWIND_TEXTAREA = (
-    "w-full px-3.5 py-2.5 rounded-lg border border-slate-300 dark:border-[#243B5A] "
-    "bg-white dark:bg-[#101D32] text-[#0B1628] dark:text-[#F8FAFC] "
-    "focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-sm transition-all"
+    "w-full px-3.5 py-2.5 rounded-md border border-[#CBD5E1] dark:border-[#334155] "
+    "bg-white dark:bg-[#0B1220] text-[#0F172A] dark:text-[#F8FAFC] placeholder:text-slate-400 dark:placeholder:text-slate-500 "
+    "focus:outline-none focus:border-[#15803D] dark:focus:border-[#22C55E] focus:ring-2 focus:ring-[#15803D]/20 text-sm transition-colors"
 )
 
 

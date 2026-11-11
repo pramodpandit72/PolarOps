@@ -1,0 +1,137 @@
+<!-- Official Government-Style Multi-Section Footer -->
+<footer id="contact" class="bg-[#14532D] dark:bg-[#0B1220] text-[#E2E8F0] border-t-4 border-[#0F766E] dark:border-[#15803D] transition-colors">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-white/15 dark:border-[#334155]">
+
+      <!-- 1. Brand & Overview -->
+      <div>
+        <a href="{% url 'core:index' %}" class="inline-flex items-center gap-2.5 font-bold text-lg text-white mb-3">
+          <div class="w-8 h-8 rounded-md bg-white/15 border border-white/25 flex items-center justify-center text-[#CCFBF1]">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+            </svg>
+          </div>
+          <span>PolarOps</span>
+        </a>
+        <p class="text-xs text-[#DCFCE7]/85 dark:text-[#94A3B8] leading-relaxed">
+          Integrated Polar Expedition Logistics &amp; Asset Management Portal designed for coordinating scientific deployments, field personnel, supplies, and equipment maintenance.
+        </p>
+      </div>
+
+      <!-- 2. Quick Links -->
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-[#CCFBF1] mb-4">Quick Links</h3>
+        <ul class="space-y-2 text-xs">
+          <li><a href="{% url 'core:index' %}" class="text-white/85 hover:text-white hover:underline">Home</a></li>
+          <li><a href="{% url 'core:index' %}#about" class="text-white/85 hover:text-white hover:underline">About the Platform</a></li>
+          <li><a href="{% url 'core:index' %}#features" class="text-white/85 hover:text-white hover:underline">Operational Services</a></li>
+          <li><a href="{% url 'core:index' %}#how-it-works" class="text-white/85 hover:text-white hover:underline">Operational Workflow</a></li>
+          {% if request.user.is_authenticated %}
+          <li><a href="{% url 'operations:dashboard' %}" class="text-white/85 hover:text-white hover:underline">Operations Dashboard</a></li>
+          {% else %}
+          <li><a href="{% url 'login' %}" class="text-white/85 hover:text-white hover:underline">Operator Sign In</a></li>
+          <li><a href="{% url 'core:signup' %}" class="text-white/85 hover:text-white hover:underline">Account Registration</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <!-- 3. Core Services -->
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-[#CCFBF1] mb-4">Portal Modules</h3>
+        <ul class="space-y-2 text-xs">
+          <li><a href="{% url 'operations:expedition_list' %}" class="text-white/85 hover:text-white hover:underline">Expedition Management</a></li>
+          <li><a href="{% url 'operations:personnel_list' %}" class="text-white/85 hover:text-white hover:underline">Personnel Registry</a></li>
+          <li><a href="{% url 'operations:asset_list' %}" class="text-white/85 hover:text-white hover:underline">Asset &amp; Maintenance</a></li>
+          <li><a href="{% url 'operations:supply_list' %}" class="text-white/85 hover:text-white hover:underline">Supplies &amp; Rations</a></li>
+          <li><a href="{% url 'operations:logistics_list' %}" class="text-white/85 hover:text-white hover:underline">Transport &amp; Logistics</a></li>
+          <li><a href="{% url 'operations:location_list' %}" class="text-white/85 hover:text-white hover:underline">Stations &amp; Locations</a></li>
+        </ul>
+      </div>
+
+      <!-- 4. Project & Support Info -->
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-[#CCFBF1] mb-4">Support &amp; Information</h3>
+        <p class="text-xs text-[#DCFCE7]/85 dark:text-[#94A3B8] leading-relaxed mb-3">
+          Academic Project Portal — B.Tech Computer Science &amp; Engineering (7th Semester, Full-Stack Development).
+        </p>
+        <div class="space-y-1.5 text-xs text-white/90">
+          <p class="flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-[#CCFBF1] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+            <span>Architecture: Django 6.1 + MongoDB Atlas</span>
+          </p>
+          <p class="flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-[#CCFBF1] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            <span>CSRF &amp; Session-Protected Access</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Legal / Policy Bar -->
+    <div class="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#DCFCE7]/80 dark:text-[#94A3B8]">
+      <p>&copy; 2026 PolarOps Expedition Logistics Portal. All rights reserved.</p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <button type="button" data-modal-open="modal-privacy" class="hover:text-white underline underline-offset-2">Privacy Policy</button>
+        <span aria-hidden="true">&bull;</span>
+        <button type="button" data-modal-open="modal-terms" class="hover:text-white underline underline-offset-2">Terms &amp; Conditions</button>
+        <span aria-hidden="true">&bull;</span>
+        <button type="button" data-modal-open="modal-accessibility" class="hover:text-white underline underline-offset-2">Accessibility Statement</button>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Accessible Policy Modals -->
+<div id="modal-privacy" role="dialog" aria-modal="true" aria-labelledby="modal-privacy-title" aria-hidden="true"
+  class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+  <div class="gov-card max-w-lg w-full p-6">
+    <div class="flex items-center justify-between pb-3 mb-4 border-b border-[#E2E8F0] dark:border-[#334155]">
+      <h4 id="modal-privacy-title" class="text-base font-bold text-[#14532D] dark:text-[#DCFCE7]">Privacy Policy</h4>
+      <button type="button" data-modal-close aria-label="Close Privacy Policy" class="p-1 rounded hover:bg-slate-100 dark:hover:bg-[#111C2E] text-[#475569] dark:text-[#CBD5E1]">&times;</button>
+    </div>
+    <p class="text-sm text-[#334155] dark:text-[#E2E8F0] leading-relaxed mb-4">
+      PolarOps stores user account credentials, operational logs, expedition records, asset registries, and inventory items strictly within the configured application database to support authorized mission management workflows. Session cookies are used solely for secure authentication and CSRF protection.
+    </p>
+    <div class="text-right">
+      <button type="button" data-modal-close class="btn-primary px-4 py-2 text-xs">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-terms" role="dialog" aria-modal="true" aria-labelledby="modal-terms-title" aria-hidden="true"
+  class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+  <div class="gov-card max-w-lg w-full p-6">
+    <div class="flex items-center justify-between pb-3 mb-4 border-b border-[#E2E8F0] dark:border-[#334155]">
+      <h4 id="modal-terms-title" class="text-base font-bold text-[#14532D] dark:text-[#DCFCE7]">Terms &amp; Conditions</h4>
+      <button type="button" data-modal-close aria-label="Close Terms and Conditions" class="p-1 rounded hover:bg-slate-100 dark:hover:bg-[#111C2E] text-[#475569] dark:text-[#CBD5E1]">&times;</button>
+    </div>
+    <p class="text-sm text-[#334155] dark:text-[#E2E8F0] leading-relaxed mb-4">
+      This platform is developed as an academic institutional portal for managing expedition logistics, equipment maintenance schedules, and supply chain operations. Authenticated users are responsible for maintaining accurate records and safeguarding account credentials.
+    </p>
+    <div class="text-right">
+      <button type="button" data-modal-close class="btn-primary px-4 py-2 text-xs">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-accessibility" role="dialog" aria-modal="true" aria-labelledby="modal-accessibility-title" aria-hidden="true"
+  class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+  <div class="gov-card max-w-lg w-full p-6">
+    <div class="flex items-center justify-between pb-3 mb-4 border-b border-[#E2E8F0] dark:border-[#334155]">
+      <h4 id="modal-accessibility-title" class="text-base font-bold text-[#14532D] dark:text-[#DCFCE7]">Accessibility Statement</h4>
+      <button type="button" data-modal-close aria-label="Close Accessibility Statement" class="p-1 rounded hover:bg-slate-100 dark:hover:bg-[#111C2E] text-[#475569] dark:text-[#CBD5E1]">&times;</button>
+    </div>
+    <p class="text-sm text-[#334155] dark:text-[#E2E8F0] leading-relaxed mb-4">
+      PolarOps is designed in alignment with WCAG accessibility practices, including semantic landmarks, keyboard-focus visibility, skip-to-content navigation, descriptive labels, and high-contrast Light and Dark themes.
+    </p>
+    <div class="text-right">
+      <button type="button" data-modal-close class="btn-primary px-4 py-2 text-xs">Close</button>
+    </div>
+  </div>
+</div>
+

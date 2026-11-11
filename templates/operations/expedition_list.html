@@ -4,89 +4,93 @@
 {% block page_title %}Expedition Management{% endblock %}
 
 {% block app_content %}
-<!-- Header Bar with Search & Filters -->
-<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+<!-- Header Bar -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 mb-6 border-b border-[#E2E8F0] dark:border-[#334155]">
   <div>
-    <h2 class="text-2xl font-extrabold text-[#0B1628] dark:text-[#F8FAFC]">Polar Expeditions</h2>
-    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Manage field missions, timelines, route objectives, and station coordination.</p>
+    <h2 class="text-2xl font-bold text-[#14532D] dark:text-[#DCFCE7]">Polar Expeditions</h2>
+    <p class="text-xs text-[#475569] dark:text-[#94A3B8] mt-1">Manage field missions, timelines, route objectives, and station coordination.</p>
   </div>
-  <a href="{% url 'operations:expedition_create' %}" class="btn-primary inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-xs shadow-sm hover:bg-blue-700 self-start">
-    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+  <a href="{% url 'operations:expedition_create' %}" class="btn-primary px-4 py-2.5 text-xs self-start">
+    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
     New Expedition
   </a>
 </div>
 
 <!-- Search & Status Filter Controls -->
-<div class="bg-white dark:bg-[#101D32] p-4 rounded-2xl border border-slate-200 dark:border-[#243B5A] shadow-sm mb-6">
+<div class="gov-card p-4 mb-6">
   <form method="get" class="flex flex-wrap items-center gap-3">
-    <div class="flex-1 min-w-[200px]">
-      <input type="text" name="q" value="{{ q }}" placeholder="Search by expedition name, ID, or scientific objective..."
-        class="w-full px-3.5 py-2 rounded-xl text-xs border border-slate-300 dark:border-[#243B5A] bg-slate-50/50 dark:bg-[#07111F] text-[#0B1628] dark:text-[#F8FAFC] focus:outline-none focus:border-blue-600">
+    <div class="flex-1 min-w-[220px]">
+      <label for="exp-search" class="sr-only">Search expeditions</label>
+      <input id="exp-search" type="text" name="q" value="{{ q }}" placeholder="Search by expedition name, ID, or scientific objective..."
+        class="w-full h-10 px-3.5 rounded-md text-xs border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#0B1220] text-[#0F172A] dark:text-[#F8FAFC] placeholder:text-slate-400 focus:outline-none focus:border-[#15803D]">
     </div>
     <div>
-      <select name="status" class="px-3 py-2 rounded-xl text-xs border border-slate-300 dark:border-[#243B5A] bg-slate-50/50 dark:bg-[#07111F] text-[#0B1628] dark:text-[#F8FAFC]">
+      <label for="exp-status" class="sr-only">Filter by status</label>
+      <select id="exp-status" name="status" class="h-10 px-3 rounded-md text-xs border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#0B1220] text-[#0F172A] dark:text-[#F8FAFC] focus:outline-none focus:border-[#15803D]">
         <option value="">All Statuses</option>
         {% for val, label in status_choices %}
         <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
         {% endfor %}
       </select>
     </div>
-    <button type="submit" class="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700">Filter</button>
+    <button type="submit" class="btn-primary h-10 px-4 text-xs">Filter</button>
     {% if q or status_filter %}
-    <a href="{% url 'operations:expedition_list' %}" class="text-xs text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 py-2">Clear</a>
+    <a href="{% url 'operations:expedition_list' %}" class="btn-outline-neutral h-10 px-3.5 text-xs">Clear</a>
     {% endif %}
   </form>
 </div>
 
 <!-- Expeditions Table -->
-<div class="bg-white dark:bg-[#101D32] rounded-2xl border border-slate-200 dark:border-[#243B5A] shadow-sm overflow-hidden">
+<div class="gov-card overflow-hidden">
   <div class="overflow-x-auto">
     <table class="w-full text-left text-xs">
-      <thead class="bg-slate-50 dark:bg-[#07111F] text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-[#243B5A]">
+      <thead class="bg-[#F0FDF4] dark:bg-[#111C2E] text-[#14532D] dark:text-[#DCFCE7] uppercase tracking-wider border-b border-[#E2E8F0] dark:border-[#334155]">
         <tr>
-          <th class="px-5 py-3 font-semibold">Expedition ID</th>
-          <th class="px-5 py-3 font-semibold">Mission Name</th>
-          <th class="px-4 py-3 font-semibold">Location</th>
-          <th class="px-4 py-3 font-semibold">Dates</th>
-          <th class="px-4 py-3 font-semibold">Status</th>
-          <th class="px-5 py-3 font-semibold text-right">Actions</th>
+          <th class="px-5 py-3 font-bold">Expedition ID</th>
+          <th class="px-5 py-3 font-bold">Mission Name</th>
+          <th class="px-4 py-3 font-bold">Location</th>
+          <th class="px-4 py-3 font-bold">Dates</th>
+          <th class="px-4 py-3 font-bold">Status</th>
+          <th class="px-5 py-3 font-bold text-right">Actions</th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-slate-100 dark:divide-[#243B5A]/60">
+      <tbody class="divide-y divide-[#E2E8F0] dark:divide-[#334155]">
         {% for exp in expeditions %}
-        <tr class="hover:bg-slate-50/50 dark:hover:bg-[#12233F]/50 transition-colors">
-          <td class="px-5 py-3.5 font-mono text-blue-600 dark:text-blue-400 font-bold">
+        <tr class="hover:bg-[#F0FDF4]/50 dark:hover:bg-[#111C2E]/60 transition-colors">
+          <td class="px-5 py-3.5 font-mono text-[#15803D] dark:text-[#86EFAC] font-bold">
             {{ exp.expedition_id }}
           </td>
           <td class="px-5 py-3.5">
-            <a href="{% url 'operations:expedition_detail' exp.pk %}" class="font-bold text-[#0B1628] dark:text-[#F8FAFC] hover:text-blue-600 dark:hover:text-blue-400 text-sm">
+            <a href="{% url 'operations:expedition_detail' exp.pk %}" class="font-bold text-[#0F172A] dark:text-[#F8FAFC] hover:text-[#15803D] dark:hover:text-[#86EFAC] text-sm">
               {{ exp.name }}
             </a>
-            <p class="text-[11px] text-slate-400 truncate max-w-xs mt-0.5">{{ exp.objective }}</p>
+            <p class="text-[11px] text-[#475569] dark:text-[#94A3B8] truncate max-w-xs mt-0.5">{{ exp.objective }}</p>
           </td>
           <td class="px-4 py-3.5 text-[#334155] dark:text-[#CBD5E1]">
             {{ exp.location.name|default:"Unassigned Location" }}
           </td>
-          <td class="px-4 py-3.5 text-slate-500 dark:text-slate-400 font-mono text-[11px]">
-            {{ exp.start_date }} ➔ {{ exp.end_date }}
+          <td class="px-4 py-3.5 text-[#475569] dark:text-[#94A3B8] font-mono text-[11px]">
+            {{ exp.start_date }} &rarr; {{ exp.end_date }}
           </td>
           <td class="px-4 py-3.5">
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold {% if exp.status == 'Active' %}bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800{% elif exp.status == 'Planned' %}bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800{% elif exp.status == 'Completed' %}bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800{% else %}bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400{% endif %}">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded text-[11px] font-semibold {% if exp.status == 'Active' %}bg-[#DCFCE7] text-[#14532D] dark:bg-[#14532D]/60 dark:text-[#DCFCE7] border border-[#BBF7D0] dark:border-[#15803D]{% elif exp.status == 'Planned' %}bg-[#CCFBF1] text-[#0F766E] dark:bg-[#0F766E]/40 dark:text-[#CCFBF1] border border-[#99F6E4] dark:border-[#0F766E]{% elif exp.status == 'Completed' %}bg-slate-100 text-[#334155] dark:bg-slate-800 dark:text-[#E2E8F0] border border-[#CBD5E1] dark:border-[#475569]{% else %}bg-red-50 text-[#991B1B] dark:bg-red-950/50 dark:text-[#FCA5A5] border border-red-200 dark:border-red-900{% endif %}">
               {{ exp.status }}
             </span>
           </td>
-          <td class="px-5 py-3.5 text-right space-x-2">
-            <a href="{% url 'operations:expedition_detail' exp.pk %}" class="font-semibold text-blue-600 dark:text-blue-400 hover:underline">View</a>
-            <a href="{% url 'operations:expedition_edit' exp.pk %}" class="font-semibold text-slate-500 hover:text-blue-600 dark:hover:text-blue-400">Edit</a>
-            <a href="{% url 'operations:expedition_delete' exp.pk %}" class="font-semibold text-red-500 hover:text-red-700">Delete</a>
+          <td class="px-5 py-3.5 text-right space-x-3 whitespace-nowrap">
+            <a href="{% url 'operations:expedition_detail' exp.pk %}" class="font-semibold text-[#15803D] dark:text-[#86EFAC] hover:underline">View</a>
+            <a href="{% url 'operations:expedition_edit' exp.pk %}" class="font-semibold text-[#334155] dark:text-[#CBD5E1] hover:text-[#15803D] dark:hover:text-[#86EFAC] hover:underline">Edit</a>
+            <a href="{% url 'operations:expedition_delete' exp.pk %}" class="font-semibold text-[#B91C1C] dark:text-[#FCA5A5] hover:underline">Delete</a>
           </td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="6" class="px-5 py-12 text-center text-slate-400">
-            <p class="text-sm font-semibold text-[#0B1628] dark:text-[#F8FAFC]">No expeditions found</p>
-            <p class="text-xs mt-1">Get started by launching a new polar expedition mission.</p>
-            <a href="{% url 'operations:expedition_create' %}" class="inline-block mt-3 px-4 py-2 rounded-xl bg-blue-600 text-white font-semibold text-xs">Create Expedition</a>
+          <td colspan="6" class="px-5 py-12 text-center text-[#475569] dark:text-[#94A3B8]">
+            <p class="text-sm font-semibold text-[#0F172A] dark:text-[#F8FAFC]">No expeditions found</p>
+            <p class="text-xs mt-1 mb-3">Get started by launching a new polar expedition mission.</p>
+            <a href="{% url 'operations:expedition_create' %}" class="btn-primary px-4 py-2 text-xs">Create Expedition</a>
           </td>
         </tr>
         {% endfor %}

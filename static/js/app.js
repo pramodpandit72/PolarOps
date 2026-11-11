@@ -1,99 +1,139 @@
 /* ============================================================
    PolarOps — app.js
-   Theme toggle, mobile menu, scroll reveal, stat counters
+   Theme system (localStorage + OS preference), mobile navigation,
+   user dropdown menu, accessible policy modals, delete confirmation
    ============================================================ */
 
-// ---------- Theme ----------
-const html = document.documentElement;
+const htmlEl = document.documentElement;
 const THEME_KEY = 'polarops-theme';
+
+function getPreferredTheme() {
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved === 'dark' || saved === 'light') {
+    return saved;
+  }
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark';
+  }
+  return 'light';
+}
 
 function applyTheme(theme) {
   if (theme === 'dark') {
-    html.classList.add('dark');
+    htmlEl.classList.add('dark');
   } else {
-    html.classList.remove('dark');
+    htmlEl.classList.remove('dark');
   }
+  document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+    btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+  });
 }
 
 function toggleTheme() {
-  const isDark = html.classList.contains('dark');
+  const isDark = htmlEl.classList.contains('dark');
   const next = isDark ? 'light' : 'dark';
   localStorage.setItem(THEME_KEY, next);
   applyTheme(next);
 }
 
-// Apply saved or default theme on load
-applyTheme(localStorage.getItem(THEME_KEY) || 'light');
+// Apply theme immediately
+applyTheme(getPreferredTheme());
 
-// Wire all theme toggle buttons
+// Sync with system preference changes if user hasn't manually overridden
+if (window.matchMedia) {
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+  const onChange = (e) => {
+    if (!localStorage.getItem(THEME_KEY)) {
+      applyTheme(e.matches ? 'dark' : 'light');
+    }
+  };
+  if (mq.addEventListener) mq.addEventListener('change', onChange);
+  else if (mq.addListener) mq.addListener(onChange);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
+  // ---------- Theme Toggle Buttons ----------
+  applyTheme(getPreferredTheme());
+  document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
     btn.addEventListener('click', toggleTheme);
   });
 
-  // ---------- Mobile Menu ----------
+  // ---------- Public Mobile Menu ----------
   const mobileBtn = document.getElementById('mobile-menu-btn');
   const mobileMenu = document.getElementById('mobile-menu');
   if (mobileBtn && mobileMenu) {
     mobileBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
+      const isHidden = mobileMenu.classList.toggle('hidden');
+      mobileBtn.setAttribute('aria-expanded', String(!isHidden));
     });
   }
 
-  // ---------- Scroll Reveal ----------
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
+  // ---------- Accessible Dropdown Menus ----------
+  document.querySelectorAll('[data-dropdown-toggle]').forEach((trigger) => {
+    const targetId = trigger.getAttribute('data-dropdown-toggle');
+    const menu = document.getElementById(targetId);
+    if (!menu) return;
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const willOpen = menu.classList.contains('hidden');
+      document.querySelectorAll('[data-dropdown-menu]').forEach((m) => {
+        m.classList.add('hidden');
+      });
+      document.querySelectorAll('[data-dropdown-toggle]').forEach((t) => {
+        t.setAttribute('aria-expanded', 'false');
+      });
+      if (willOpen) {
+        menu.classList.remove('hidden');
+        trigger.setAttribute('aria-expanded', 'true');
       }
     });
-  }, { threshold: 0.15 });
+  });
 
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  document.addEventListener('click', () => {
+    document.querySelectorAll('[data-dropdown-menu]').forEach((m) => m.classList.add('hidden'));
+    document.querySelectorAll('[data-dropdown-toggle]').forEach((t) => t.setAttribute('aria-expanded', 'false'));
+  });
 
-  // ---------- Stat Counter ----------
-  function animateCount(el) {
-    const target = parseInt(el.dataset.target, 10);
-    const duration = 1800;
-    const start = performance.now();
-    const update = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
-      el.textContent = Math.floor(ease * target);
-      if (progress < 1) requestAnimationFrame(update);
-      else el.textContent = target;
-    };
-    requestAnimationFrame(update);
-  }
-
-  const statObserver = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        animateCount(e.target);
-        statObserver.unobserve(e.target);
+  // ---------- Policy / Info Modals (Footer) ----------
+  document.querySelectorAll('[data-modal-open]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const modalId = btn.getAttribute('data-modal-open');
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+        const closeBtn = modal.querySelector('[data-modal-close]');
+        if (closeBtn) closeBtn.focus();
       }
     });
-  }, { threshold: 0.5 });
+  });
 
-  document.querySelectorAll('[data-target]').forEach(el => statObserver.observe(el));
-
-  // ---------- Navbar scroll shadow ----------
-  const navbar = document.getElementById('main-navbar');
-  if (navbar) {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 10) {
-        navbar.classList.add('shadow-sm');
-      } else {
-        navbar.classList.remove('shadow-sm');
+  document.querySelectorAll('[data-modal-close]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const modal = btn.closest('[role="dialog"]');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
       }
-    }, { passive: true });
-  }
+    });
+  });
 
-  // ---------- Delete confirmation ----------
-  document.querySelectorAll('[data-confirm]').forEach(btn => {
-    btn.addEventListener('click', e => {
-      if (!confirm(btn.dataset.confirm || 'Are you sure?')) {
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('[role="dialog"]:not(.hidden)').forEach((modal) => {
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+      });
+      document.querySelectorAll('[data-dropdown-menu]').forEach((m) => m.classList.add('hidden'));
+    }
+  });
+
+  // ---------- Delete Confirmation ----------
+  document.querySelectorAll('[data-confirm]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      if (!confirm(btn.dataset.confirm || 'Are you sure you want to proceed?')) {
         e.preventDefault();
       }
     });

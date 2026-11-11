@@ -4,21 +4,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}PolarOps | Polar Expedition Logistics & Asset Management{% endblock %}</title>
-  <meta name="description" content="{% block meta_description %}PolarOps — Enterprise Polar Expedition Logistics and Asset Management Platform for scientific and field research teams.{% endblock %}">
+  <title>{% block title %}PolarOps | Polar Expedition Logistics &amp; Asset Management Portal{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}PolarOps — Official Polar Expedition Logistics and Asset Management Portal for scientific and field research operations.{% endblock %}">
+
+  <!-- Google Fonts: Inter & Noto Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <!-- Tailwind CSS v4 Play CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <!-- Force Tailwind v4 to use class-based dark mode instead of OS media query -->
+  <!-- Force Tailwind v4 class-based dark mode -->
   <style type="text/tailwindcss">
     @variant dark (&:where(.dark, .dark *));
   </style>
-  <!-- Custom CSS -->
+
+  <!-- Design System CSS -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <!-- Theme init (before body renders to prevent flicker) -->
+
+  <!-- Theme Init (respects saved preference or OS preference before body renders) -->
   <script>
-    (function(){
-      var t = localStorage.getItem('polarops-theme') || 'light';
-      if (t === 'dark') {
+    (function () {
+      var saved = localStorage.getItem('polarops-theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = (saved === 'dark' || saved === 'light') ? saved : (prefersDark ? 'dark' : 'light');
+      if (theme === 'dark') {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
@@ -27,11 +37,13 @@
   </script>
   {% block head_extra %}{% endblock %}
 </head>
-<body class="bg-white dark:bg-[#07111F] text-slate-800 dark:text-slate-100 transition-colors duration-300 antialiased selection:bg-blue-500/20 selection:text-blue-900 dark:selection:text-blue-200">
+<body class="min-h-screen flex flex-col bg-[#F8FAFC] dark:bg-[#0B1220] text-[#0F172A] dark:text-[#F8FAFC] transition-colors duration-200 antialiased selection:bg-[#DCFCE7] selection:text-[#14532D] dark:selection:bg-[#15803D]/40 dark:selection:text-[#DCFCE7]">
 
-{% block content %}{% endblock %}
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<script src="{% static 'js/app.js' %}"></script>
-{% block scripts %}{% endblock %}
+  {% block content %}{% endblock %}
+
+  <script src="{% static 'js/app.js' %}"></script>
+  {% block scripts %}{% endblock %}
 </body>
 </html>
