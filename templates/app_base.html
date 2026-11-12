@@ -290,7 +290,7 @@
 
       <!-- Sidebar Account Card -->
       <div class="p-4 border-t border-[#E2E8F0] dark:border-[#334155] bg-[#F0FDF4]/60 dark:bg-[#0B1220]">
-        <div class="flex items-center gap-2.5 mb-3">
+        <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-md bg-[#14532D] dark:bg-[#15803D] text-white flex items-center justify-center font-bold text-xs shrink-0">
             {{ request.user.username|slice:":1"|upper }}
           </div>
@@ -298,14 +298,6 @@
             <p class="text-xs font-bold text-[#0F172A] dark:text-[#F8FAFC] truncate">{{ request.user.username }}</p>
             <p class="text-[11px] text-[#475569] dark:text-[#94A3B8] truncate">Authorized Operator</p>
           </div>
-        </div>
-
-        <div class="flex items-center justify-between text-xs pt-2.5 border-t border-[#E2E8F0] dark:border-[#334155]">
-          <a href="{% url 'core:index' %}" class="text-[#15803D] dark:text-[#DCFCE7] hover:underline font-medium">Public Portal</a>
-          <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="text-[#B91C1C] dark:text-[#FCA5A5] hover:underline font-semibold">Sign Out</button>
-          </form>
         </div>
       </div>
     </aside>
