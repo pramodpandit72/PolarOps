@@ -1,7 +1,7 @@
 /* ============================================================
    PolarOps — app.js
-   Theme system (localStorage + OS preference), mobile navigation,
-   user dropdown menu, accessible policy modals, delete confirmation
+   Theme system (Light Mode default + localStorage persistence),
+   mobile navigation, user dropdown menu, modals, confirmations
    ============================================================ */
 
 const htmlEl = document.documentElement;
@@ -9,13 +9,7 @@ const THEME_KEY = 'polarops-theme';
 
 function getPreferredTheme() {
   const saved = localStorage.getItem(THEME_KEY);
-  if (saved === 'dark' || saved === 'light') {
-    return saved;
-  }
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark';
-  }
-  return 'light';
+  return saved === 'dark' ? 'dark' : 'light';
 }
 
 function applyTheme(theme) {
@@ -38,18 +32,6 @@ function toggleTheme() {
 
 // Apply theme immediately
 applyTheme(getPreferredTheme());
-
-// Sync with system preference changes if user hasn't manually overridden
-if (window.matchMedia) {
-  const mq = window.matchMedia('(prefers-color-scheme: dark)');
-  const onChange = (e) => {
-    if (!localStorage.getItem(THEME_KEY)) {
-      applyTheme(e.matches ? 'dark' : 'light');
-    }
-  };
-  if (mq.addEventListener) mq.addEventListener('change', onChange);
-  else if (mq.addListener) mq.addListener(onChange);
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   // ---------- Theme Toggle Buttons ----------

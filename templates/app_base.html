@@ -21,13 +21,11 @@
   <!-- Design System CSS -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-  <!-- Theme Init (respects saved preference or OS preference before body renders) -->
+  <!-- Theme Init (defaults to Light Mode unless user explicitly saved Dark Mode) -->
   <script>
     (function () {
       var saved = localStorage.getItem('polarops-theme');
-      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      var theme = (saved === 'dark' || saved === 'light') ? saved : (prefersDark ? 'dark' : 'light');
-      if (theme === 'dark') {
+      if (saved === 'dark') {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
