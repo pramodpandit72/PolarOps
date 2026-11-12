@@ -1,35 +1,37 @@
-<!-- Official Top Utility Strip -->
-<div class="bg-[#14532D] dark:bg-[#0B1220] text-white border-b border-[#166534] dark:border-[#334155] text-xs">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-9 flex items-center justify-between gap-4">
-    <div class="flex items-center gap-3 min-w-0 truncate">
-      <span class="inline-flex items-center gap-1.5 font-medium text-[#DCFCE7]">
-        <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-        </svg>
-        <span>PolarOps Digital Portal</span>
-      </span>
-      <span class="hidden sm:inline text-[#86EFAC]/60" aria-hidden="true">|</span>
-      <span class="hidden sm:inline text-white/90 truncate">Polar Expedition Logistics &amp; Asset Management System</span>
-    </div>
-    <div class="flex items-center gap-4 shrink-0">
-      <a href="#main-content" class="underline underline-offset-2 text-white/90 hover:text-white hidden sm:inline">Skip to main content</a>
-      <button data-theme-toggle type="button" aria-label="Toggle color theme" aria-pressed="false"
-        class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-white/25 bg-white/10 hover:bg-white/20 text-white text-[11px] font-medium transition-colors">
-        <svg class="w-3.5 h-3.5 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
-        </svg>
-        <svg class="w-3.5 h-3.5 hidden dark:block text-[#CCFBF1]" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.66-9H21M3 12H2.34m15.36-6.36l-.71.71M6.05 17.66l-.71.71M17.66 17.66l-.71-.71M6.05 6.34l-.71-.71M12 7a5 5 0 100 10A5 5 0 0012 7z"/>
-        </svg>
-        <span class="dark:hidden">Dark Mode</span>
-        <span class="hidden dark:inline">Light Mode</span>
-      </button>
+<!-- Unified Sticky Top Header (Utility Strip + Public Portal Navbar Together) -->
+<header class="sticky top-0 z-40">
+  <!-- Official Top Utility Strip -->
+  <div class="bg-[#14532D] dark:bg-[#0B1220] text-white border-b border-[#166534] dark:border-[#334155] text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-9 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 min-w-0 truncate">
+        <span class="inline-flex items-center gap-1.5 font-medium text-[#DCFCE7]">
+          <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+          <span>PolarOps Digital Portal</span>
+        </span>
+        <span class="hidden sm:inline text-[#86EFAC]/60" aria-hidden="true">|</span>
+        <span class="hidden sm:inline text-white/90 truncate">Polar Expedition Logistics &amp; Asset Management System</span>
+      </div>
+      <div class="flex items-center gap-4 shrink-0">
+        <a href="#main-content" class="underline underline-offset-2 text-white/90 hover:text-white hidden sm:inline">Skip to main content</a>
+        <button data-theme-toggle type="button" aria-label="Toggle color theme" aria-pressed="false"
+          class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-white/25 bg-white/10 hover:bg-white/20 text-white text-[11px] font-medium transition-colors">
+          <svg class="w-3.5 h-3.5 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+          </svg>
+          <svg class="w-3.5 h-3.5 hidden dark:block text-[#CCFBF1]" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.66-9H21M3 12H2.34m15.36-6.36l-.71.71M6.05 17.66l-.71.71M17.66 17.66l-.71-.71M6.05 6.34l-.71-.71M12 7a5 5 0 100 10A5 5 0 0012 7z"/>
+          </svg>
+          <span class="dark:hidden">Dark Mode</span>
+          <span class="hidden dark:inline">Light Mode</span>
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Main Portal Navbar -->
-<header class="sticky top-0 z-40 bg-white dark:bg-[#111C2E] border-b border-[#E2E8F0] dark:border-[#334155] shadow-xs transition-colors">
+  <!-- Main Portal Navbar -->
+  <div class="bg-white dark:bg-[#111C2E] border-b border-[#E2E8F0] dark:border-[#334155] shadow-xs transition-colors">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <!-- Emblem & Official Title -->
@@ -111,6 +113,7 @@
         <a href="{% url 'core:signup' %}" class="btn-primary flex-1 py-2 text-sm">Register</a>
       {% endif %}
     </div>
+  </div>
   </div>
 </header>
 
