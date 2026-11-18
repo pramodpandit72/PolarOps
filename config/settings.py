@@ -5,6 +5,22 @@ from django.contrib.messages import constants as messages
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # -------------------------------------------------------------------
+# Environment Variables (.env auto-load)
+# -------------------------------------------------------------------
+try:
+    from dotenv import load_dotenv
+    load_dotenv(BASE_DIR / '.env')
+except ImportError:
+    env_file = BASE_DIR / '.env'
+    if env_file.is_file():
+        with open(env_file, encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    k, v = line.split('=', 1)
+                    os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+
+# -------------------------------------------------------------------
 # Security — read from environment variables in production
 # -------------------------------------------------------------------
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-polarops-change-in-production')
@@ -64,7 +80,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # -------------------------------------------------------------------
 # Database — MongoDB Atlas
 # -------------------------------------------------------------------
-MONGODB_URI = os.environ['MONGODB_URI']  # Must be set in .env or hosting env vars
+MONGODB_URI = os.environ.get('MONGODB_URI', '')
+if not MONGODB_URI:
+    raise RuntimeError(
+        "MONGODB_URI is not set. Please define MONGODB_URI in your .env file or environment variables."
+    )
 
 DATABASES = {
     'default': {
